@@ -1,10 +1,10 @@
 import { CssBaseline, ThemeProvider, useMediaQuery } from "@material-ui/core";
-import { routes } from "config/routes";
-import { darkTheme, lightTheme } from "config/themes";
-import { NavBar, NavBarLink } from "layout/NavBar";
-import React from "react";
+import { routes } from "src/config/routes";
+import { darkTheme, lightTheme } from "src/config/themes";
+import { NavBar, NavBarLink } from "src/layout/NavBar";
 import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import { StrictMode } from "react";
 
 const createTabID = (path: string) => `nav-tab-${path.substr(1)}`;
 const createPanelID = (path: string) => `nav-tabpanel-${path.substr(1)}`;
@@ -47,7 +47,7 @@ function App() {
   const prefersLightMode = useMediaQuery("(prefers-color-scheme: light)");
 
   return (
-    <React.StrictMode>
+    <StrictMode>
       <ThemeProvider theme={prefersLightMode ? lightTheme : darkTheme}>
         <CssBaseline />
         <HelmetProvider>
@@ -57,7 +57,7 @@ function App() {
           </BrowserRouter>
         </HelmetProvider>
       </ThemeProvider>
-    </React.StrictMode>
+    </StrictMode>
   );
 }
 

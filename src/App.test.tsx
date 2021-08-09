@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render } from "@testing-library/react";
-import App from "App";
 import axe from "axe-core";
+import App from "./App";
 
 it("should have no axe a11y violations", (done) => {
   const { baseElement } = render(<App />);

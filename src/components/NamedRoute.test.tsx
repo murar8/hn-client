@@ -2,7 +2,6 @@ import {} from "@material-ui/core";
 import "@testing-library/jest-dom/extend-expect";
 import { render, waitFor } from "@testing-library/react";
 import { createMemoryHistory } from "history";
-import React from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { Router, Switch } from "react-router-dom";
 import { NamedRoute } from "./NamedRoute";

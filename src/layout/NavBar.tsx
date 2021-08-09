@@ -1,5 +1,5 @@
 import { AppBar, makeStyles, Slide, SvgIcon, Tab, TabProps, Tabs, Toolbar, useScrollTrigger } from "@material-ui/core";
-import { ReactComponent as Logo } from "assets/logo.svg";
+import { ReactComponent as Logo } from "src/assets/logo.svg";
 import { Children, isValidElement, PropsWithChildren, useMemo } from "react";
 import { Link, LinkProps, matchPath, useLocation } from "react-router-dom";
 
