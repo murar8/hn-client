@@ -9,7 +9,7 @@ afterEach(() => {
   document.getElementsByTagName("html")[0].innerHTML = "";
 });
 
-function renderWithContext(ui: React.ReactElement, options?: Omit<RenderOptions, "">) {
+function renderWithContext(ui: React.ReactElement) {
   const history = createMemoryHistory();
 
   const result = render(ui, {
