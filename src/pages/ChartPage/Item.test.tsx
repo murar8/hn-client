@@ -26,34 +26,14 @@ const mockComment = {
 };
 
 it("should forward the api error to the user", async () => {
-  jest.spyOn(HackerNewsContext, "useItem").mockImplementation(() => [undefined, false, Error("Something went wrong")]);
+  jest.spyOn(HackerNewsContext, "usePost").mockImplementation(() => [undefined, false, Error("Something went wrong")]);
   const { getByText } = render(<Item id={100}></Item>);
   expect(getByText("Something went wrong")).toBeVisible();
 });
 
-it("should display an error when an invalid item is returned", async () => {
-  jest.spyOn(HackerNewsContext, "useItem").mockImplementation(() => [undefined, false, undefined]);
-  const { getByText } = render(<Item id={100}></Item>);
-  expect(getByText(/error/i)).toBeVisible();
-});
-
-it("should display an error when an item is deleted", async () => {
-  jest.spyOn(HackerNewsContext, "useItem").mockImplementation(() => [{ id: 100, deleted: true }, false, undefined]);
-  const { getByText } = render(<Item id={100}></Item>);
-  expect(getByText(/error/i)).toBeVisible();
-});
-
-it("should display an error when the item has the wrong type", async () => {
-  jest
-    .spyOn(HackerNewsContext, "useItem")
-    .mockImplementation(() => [mockComment as HackerNewsContext.Item, false, undefined]);
-  const { getByText } = render(<Item id={100}></Item>);
-  expect(getByText(/error/i)).toBeVisible();
-});
-
 it("should open external urls in a new tab", async () => {
   jest
-    .spyOn(HackerNewsContext, "useItem")
+    .spyOn(HackerNewsContext, "usePost")
     .mockImplementation(() => [mockStory as HackerNewsContext.Item, false, undefined]);
 
   const { getByText } = render(<Item id={100}></Item>);

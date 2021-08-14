@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import { ChatBubble, Person, Schedule, ThumbUp, Warning } from "@material-ui/icons";
 import { ReactNode } from "react";
-import { useItem } from "src/hooks/HackerNewsContext";
+import { usePost } from "src/hooks/HackerNewsContext";
 import { baseURL, formatTimestamp } from "src/util";
 
 const useStyles = makeStyles((theme) => ({
@@ -82,26 +82,16 @@ export type ItemProps = {
 
 export function Item({ id }: ItemProps) {
   const classes = useStyles();
-  const [item, loading, error] = useItem(id);
-
-  const errorMessage = error
-    ? error.message
-    : !item
-    ? `Invalid item ID: ${id}`
-    : item.deleted
-    ? `Item with ID ${id} is deleted.`
-    : !["story", "job", "poll"].includes(item.type!)
-    ? `Item with ID ${id} is not a post.`
-    : undefined;
+  const [item, loading, error] = usePost(id);
 
   return (
-    <Card className={classes.root} onClick={() => {}}>
+    <Card className={classes.root}>
       {loading ? (
         <CardContent className={classes.loader}>
           <CircularProgress />
         </CardContent>
-      ) : errorMessage ? (
-        <CardHeader avatar={<Warning />} title="An error occured" subheader={errorMessage} />
+      ) : error ? (
+        <CardHeader avatar={<Warning />} title="An error occured" subheader={error.message} />
       ) : (
         <CardActionArea href={item!.url || ""} target={item!.url ? "_blank" : undefined} className={classes.actionArea}>
           <CardHeader

@@ -16,7 +16,7 @@ export function HackerNewsProvider(props: PropsWithChildren<{}>) {
   return <HackerNewsContext.Provider value={database} {...props} />;
 }
 
-function useHackerNewsContext() {
+export function useHackerNewsContext() {
   const context = useContext(HackerNewsContext);
 
   if (!context) {
@@ -46,7 +46,35 @@ export type Item = {
 
 export function useItem(id: number): [Item | undefined, boolean, Error | undefined] {
   const db = useHackerNewsContext();
-  return useObjectVal(db.child("item").child(id.toString()));
+  const [item, loading, apiError] = useObjectVal(db.child("item").child(id.toString()));
+
+  const error = apiError
+    ? apiError
+    : loading
+    ? undefined
+    : !item
+    ? Error(`Invalid item ID: ${id}`)
+    : item.deleted
+    ? Error(`Item with ID ${id} is deleted.`)
+    : undefined;
+
+  return [item, loading, error];
+}
+
+export type Post = Omit<Item, "parent" | "poll" | "parts" | "type"> & { type: "job" | "story" | "poll" };
+
+export function usePost(id: number): [Item | undefined, boolean, Error | undefined] {
+  const [item, loading, apiError] = useItem(id);
+
+  const error = apiError
+    ? apiError
+    : loading
+    ? undefined
+    : !["story", "job", "poll"].includes(item!.type!)
+    ? Error(`Item with ID ${id} is not a post.`)
+    : undefined;
+
+  return [item, loading, error];
 }
 
 export type User = {
