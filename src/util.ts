@@ -31,9 +31,36 @@ export function formatTimestamp(timestamp: number) {
     day: "numeric",
     month: "numeric",
     year: years ? "numeric" : undefined,
-    hour: days ? "numeric" : undefined,
-    minute: days ? "numeric" : undefined,
+    hour: !days ? "numeric" : undefined,
+    minute: !days ? "numeric" : undefined,
   };
 
   return date.toLocaleDateString(undefined, options);
+}
+
+/**
+ * Generate vibrant, "evenly spaced" colours (i.e. no clustering).
+ * See: http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript
+ */
+export function rainbow(quantity: number, step: number) {
+  const h = step / quantity;
+  const i = ~~(h * 6);
+  const f = h * 6 - i;
+  const q = 1 - f;
+
+  const [r, g, b] = [
+    [1, f, 0],
+    [q, 1, 0],
+    [0, 1, f],
+    [0, q, 1],
+    [f, 0, 1],
+    [1, 0, q],
+  ][i % 6];
+
+  const c =
+    "#" +
+    ("00" + (~~(r * 255)).toString(16)).slice(-2) +
+    ("00" + (~~(g * 255)).toString(16)).slice(-2) +
+    ("00" + (~~(b * 255)).toString(16)).slice(-2);
+  return c;
 }

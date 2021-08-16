@@ -1,6 +1,8 @@
 import "@testing-library/jest-dom/extend-expect";
-import { render } from "@testing-library/react";
-import * as HackerNewsContext from "src/hooks/HackerNewsContext";
+import { fireEvent, render, waitFor } from "@testing-library/react";
+import { createMemoryHistory } from "history";
+import { Router } from "react-router-dom";
+import * as HackerNewsContext from "src/context/HackerNewsContext";
 import { Item } from "./Item";
 
 const mockStory = {
@@ -15,30 +17,24 @@ const mockStory = {
   url: "http://www.getdropbox.com",
 };
 
-const mockComment = {
-  by: "norvig",
-  id: 2921983,
-  kids: [2922097, 2922429],
-  parent: 2921506,
-  text: "Aw shucks, guys ... you make me blush with your compliments.",
-  time: 1314211127,
-  type: "comment",
-};
-
 it("should forward the api error to the user", async () => {
-  jest.spyOn(HackerNewsContext, "usePost").mockImplementation(() => [undefined, false, Error("Something went wrong")]);
+  jest.spyOn(HackerNewsContext, "usePost").mockReturnValue({ type: "error", message: "Something went wrong." });
   const { getByText } = render(<Item id={100}></Item>);
-  expect(getByText("Something went wrong")).toBeVisible();
+  expect(getByText("Something went wrong.")).toBeVisible();
 });
 
-it("should open external urls in a new tab", async () => {
-  jest
-    .spyOn(HackerNewsContext, "usePost")
-    .mockImplementation(() => [mockStory as HackerNewsContext.Item, false, undefined]);
+it("should navigate to the item's page when clicking on the card", async () => {
+  jest.spyOn(HackerNewsContext, "usePost").mockReturnValue({ type: "data", data: mockStory as any });
 
-  const { getByText } = render(<Item id={100}></Item>);
-  const link = getByText("My YC app: Dropbox").closest("a");
+  const history = createMemoryHistory();
 
-  expect(link).toHaveAttribute("href", "http://www.getdropbox.com");
-  expect(link).toHaveAttribute("target", "_blank");
+  const { getByText } = render(<Item id={100}></Item>, {
+    wrapper: (props) => <Router history={history} {...props} />,
+  });
+
+  const link = getByText("My YC app: Dropbox");
+
+  fireEvent.click(link);
+
+  await waitFor(() => expect(history.location.pathname).toEqual("/posts/100"));
 });

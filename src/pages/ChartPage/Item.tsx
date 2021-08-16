@@ -7,12 +7,13 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import { ChatBubble, Person, Schedule, ThumbUp, Warning } from "@material-ui/icons";
-import { ReactNode } from "react";
-import { usePost } from "src/hooks/HackerNewsContext";
-import { baseURL, formatTimestamp } from "src/util";
+import { Warning } from "@material-ui/icons";
+import { useHistory } from "react-router-dom";
+import { ItemInfo } from "src/components/ItemInfo";
+import { usePost } from "src/context/HackerNewsContext";
+import { Subheader } from "../../components/Subheader";
 
-const useStyles = makeStyles((theme) => ({
+export const useStyles = makeStyles((theme) => ({
   root: {
     height: "100%",
     display: "flex",
@@ -26,21 +27,11 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
   },
 
-  tags: {
+  content: {
     flexGrow: 1,
     display: "flex",
     flexDirection: "row",
     alignItems: "flex-end",
-    flexWrap: "wrap",
-    gap: theme.spacing(2),
-  },
-
-  tag: {
-    paddingRight: theme.spacing(1),
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: theme.spacing(1),
   },
 
   spacer: {
@@ -60,50 +51,38 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type TagProps = {
-  icon?: ReactNode;
-  label?: string;
-};
-
-function Tag({ icon, label }: TagProps) {
-  const classes = useStyles();
-
-  return (
-    <div className={classes.tag}>
-      {icon}
-      <Typography variant="body1"> {label}</Typography>
-    </div>
-  );
-}
-
 export type ItemProps = {
   id: number;
 };
 
 export function Item({ id }: ItemProps) {
   const classes = useStyles();
-  const [item, loading, error] = usePost(id);
+  const history = useHistory();
+  const result = usePost(id);
 
   return (
     <Card className={classes.root}>
-      {loading ? (
+      {result.type === "loading" ? (
         <CardContent className={classes.loader}>
           <CircularProgress />
         </CardContent>
-      ) : error ? (
-        <CardHeader avatar={<Warning />} title="An error occured" subheader={error.message} />
+      ) : result.type === "error" ? (
+        <CardHeader avatar={<Warning />} title="An error occured" subheader={result.message} />
       ) : (
-        <CardActionArea href={item!.url || ""} target={item!.url ? "_blank" : undefined} className={classes.actionArea}>
+        <CardActionArea className={classes.actionArea} onClick={() => history.push(`/posts/${id}`)}>
           <CardHeader
-            title={item!.title}
-            subheader={item!.url ? baseURL(item!.url!) : undefined}
-            className={item!.dead ? classes.disabled : undefined}
+            disableTypography
+            title={<Typography variant="h5">{result.data.title}</Typography>}
+            subheader={result.data.url ? <Subheader url={result.data.url} /> : undefined}
+            className={result.data.dead ? classes.disabled : undefined}
           />
-          <CardContent className={classes.tags}>
-            <Tag icon={<Person />} label={item!.by} />
-            <Tag icon={<ThumbUp />} label={item!.score!.toString()} />
-            <Tag icon={<Schedule />} label={formatTimestamp(item!.time!)} />
-            <Tag icon={<ChatBubble />} label={item!.descendants?.toString()} />
+          <CardContent className={classes.content}>
+            <ItemInfo
+              by={result.data.by}
+              time={result.data.time}
+              score={result.data.score}
+              descendants={result.data.descendants}
+            />
           </CardContent>
         </CardActionArea>
       )}

@@ -2,11 +2,30 @@ import { CssBaseline, makeStyles, ThemeProvider, useMediaQuery } from "@material
 import { StrictMode } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter, Redirect, Switch } from "react-router-dom";
-import { routes } from "src/config/routes";
 import { darkTheme, lightTheme } from "src/config/themes";
 import { NavBar, NavBarLink } from "src/layout/NavBar";
 import { NamedRoute } from "./components/NamedRoute";
-import { HackerNewsProvider } from "./hooks/HackerNewsContext";
+import { HackerNewsProvider } from "./context/HackerNewsContext";
+import { BestStoriesPage, NewStoriesPage, TopStoriesPage } from "./pages/ChartPage";
+import { ItemPage } from "./pages/ItemPage";
+
+const tabs = [
+  {
+    name: "Best",
+    path: "/best",
+    Component: BestStoriesPage,
+  },
+  {
+    name: "Top",
+    path: "/top",
+    Component: TopStoriesPage,
+  },
+  {
+    name: "New",
+    path: "/new",
+    Component: NewStoriesPage,
+  },
+];
 
 const useStyles = makeStyles((theme) => ({
   toolbarSpacer: {
@@ -18,36 +37,37 @@ const createTabID = (path: string) => `nav-tab-${path.substr(1)}`;
 const createPanelID = (path: string) => `nav-tabpanel-${path.substr(1)}`;
 
 function Nav() {
+  const classes = useStyles();
+
   return (
     <nav>
       <NavBar>
-        {routes.map(({ name, path }) => (
+        {tabs.map(({ name, path }) => (
           <NavBarLink to={path} key={path} label={name} id={createTabID(path)} aria-controls={createPanelID(path)} />
         ))}
       </NavBar>
+      <div className={classes.toolbarSpacer} />
     </nav>
   );
 }
 
 function Main() {
-  const classes = useStyles();
-
   return (
     <main>
       <Switch>
         <Redirect exact from="/" to="/best" />
-        {routes.map(({ name, path, Component }) => (
+        <NamedRoute name="Post" path="/posts/:id">
+          <ItemPage />
+        </NamedRoute>
+        {tabs.map(({ name, path, Component }) => (
           <NamedRoute
             name={name}
             path={path}
             key={path}
             render={() => (
-              <>
-                <div className={classes.toolbarSpacer} />
-                <div id={createPanelID(path)} role="tabpanel" aria-labelledby={createTabID(path)}>
-                  <Component />
-                </div>
-              </>
+              <div id={createPanelID(path)} role="tabpanel" aria-labelledby={createTabID(path)}>
+                <Component />
+              </div>
             )}
           />
         ))}

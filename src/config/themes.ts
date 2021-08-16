@@ -1,4 +1,4 @@
-import { createTheme } from "@material-ui/core";
+import { unstable_createMuiStrictModeTheme as createMuiTheme } from "@material-ui/core";
 import { PaletteOptions } from "@material-ui/core/styles/createPalette";
 
 const palette: PaletteOptions = {
@@ -10,6 +10,6 @@ const palette: PaletteOptions = {
   },
 };
 
-export const lightTheme = createTheme({ palette: { ...palette, type: "light" } });
+export const lightTheme = createMuiTheme({ palette: { ...palette, type: "light" } });
 
-export const darkTheme = createTheme({ palette: { ...palette, type: "dark" } });
+export const darkTheme = createMuiTheme({ palette: { ...palette, type: "dark" } });
