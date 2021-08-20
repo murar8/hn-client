@@ -1,11 +1,10 @@
-import { StrictMode } from "react";
+import { ChakraProvider } from "@chakra-ui/react";
+import { theme } from "./config/theme";
 
-function App() {
+export function App() {
   return (
-    <StrictMode>
+    <ChakraProvider theme={theme}>
       <h1>Hello</h1>
-    </StrictMode>
+    </ChakraProvider>
   );
 }
-
-export default App;
