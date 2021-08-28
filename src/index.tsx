@@ -2,11 +2,12 @@ import { ColorModeScript } from "@chakra-ui/react";
 import { StrictMode } from "react";
 import ReactDOM from "react-dom";
 import { App } from "src/App";
+import { theme } from "./config/theme";
 
 function Index() {
   return (
     <StrictMode>
-      <ColorModeScript />
+      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
       <App />
     </StrictMode>
   );
