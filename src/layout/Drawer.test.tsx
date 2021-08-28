@@ -26,10 +26,6 @@ function setup(options?: { isOpen?: boolean }) {
   );
 }
 
-afterEach(() => {
-  // useDisclosure.mockClear();
-});
-
 it("renders a drawer", async () => {
   setup({ isOpen: true });
   expect(screen.getByText("Home")).toBeVisible();
