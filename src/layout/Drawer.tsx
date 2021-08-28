@@ -1,7 +1,7 @@
 import { HamburgerIcon } from "@chakra-ui/icons";
 import {
   Button,
-  Drawer as ChakraDrawer,
+  Drawer,
   DrawerBody,
   DrawerCloseButton,
   DrawerContent,
@@ -16,11 +16,11 @@ import { useMemo } from "react";
 import { Link as RouterLink, matchPath, useLocation } from "react-router-dom";
 import { useDrawer } from "./DrawerProvider";
 
-export type NavDrawerProps = Omit<DrawerProps, "isOpen" | "onClose" | "children"> & {
+export type NavigationDrawerProps = Omit<DrawerProps, "isOpen" | "onClose" | "children"> & {
   routes: { name: string; path: string }[];
 };
 
-export function NavDrawer({ routes, ...props }: NavDrawerProps) {
+export function NavigationDrawer({ routes, ...props }: NavigationDrawerProps) {
   const { isOpen, onClose } = useDrawer();
   const { pathname } = useLocation();
   const matchingRoute = useMemo(
@@ -29,7 +29,7 @@ export function NavDrawer({ routes, ...props }: NavDrawerProps) {
   );
 
   return (
-    <ChakraDrawer isOpen={isOpen} onClose={onClose} {...props}>
+    <Drawer isOpen={isOpen} onClose={onClose} {...props}>
       <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton />
@@ -50,13 +50,13 @@ export function NavDrawer({ routes, ...props }: NavDrawerProps) {
           })}
         </DrawerBody>
       </DrawerContent>
-    </ChakraDrawer>
+    </Drawer>
   );
 }
 
-export type DrawerButtonProps = Omit<IconButtonProps, "onClick" | "aria-label" | "icon">;
+export type NavigationDrawerButtonProps = Omit<IconButtonProps, "onClick" | "aria-label" | "icon">;
 
-export function DrawerButton({ ...props }: DrawerButtonProps) {
+export function NavigationDrawerButton({ ...props }: NavigationDrawerButtonProps) {
   const { onOpen } = useDrawer();
   return <IconButton aria-label="Open drawer" icon={<HamburgerIcon />} onClick={onOpen} {...props} />;
 }

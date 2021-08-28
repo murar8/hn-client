@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { createMemoryHistory } from "history";
 import { ComponentType, ReactElement } from "react";
 import { Router } from "react-router-dom";
-import { DrawerButton, NavDrawer } from "./Drawer";
+import { NavigationDrawerButton, NavigationDrawer } from "./Drawer";
 import * as drawerContext from "./DrawerProvider";
 import { DrawerProvider } from "./DrawerProvider";
 
@@ -20,8 +20,8 @@ function renderWithRouter(ui: ReactElement) {
 function setup(options?: { isOpen?: boolean }) {
   return renderWithRouter(
     <DrawerProvider isOpen={options?.isOpen}>
-      <DrawerButton />
-      <NavDrawer routes={routes} />
+      <NavigationDrawerButton />
+      <NavigationDrawer routes={routes} />
     </DrawerProvider>
   );
 }
