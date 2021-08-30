@@ -1,24 +1,32 @@
-import { ChevronDownIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import {
   Button,
   Divider,
   HStack,
+  IconButton,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
   Spacer,
   useBreakpointValue,
+  useColorMode,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useMemo } from "react";
 import { Link, matchPath, useLocation } from "react-router-dom";
-import { ColorModeButton } from "src/components/ColorModeButton";
 import { Route } from "src/config/routes";
 
 function useMatchingRouteIndex(routes: Route[]) {
   const { pathname } = useLocation();
   const index = useMemo(() => routes.findIndex(({ path }) => matchPath(pathname, { path })), [routes, pathname]);
   return index !== -1 ? index : undefined;
+}
+
+function ColorModeButton() {
+  const { toggleColorMode } = useColorMode();
+  const Icon = useColorModeValue(MoonIcon, SunIcon);
+  return <IconButton aria-label="Toggle color mode" icon={<Icon />} onClick={toggleColorMode} />;
 }
 
 type LinkContainerProps = {

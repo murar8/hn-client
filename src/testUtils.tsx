@@ -1,4 +1,4 @@
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, ColorModeOptions, ColorModeProvider } from "@chakra-ui/react";
 import { render, RenderOptions, RenderResult } from "@testing-library/react";
 import { match as matchMediaQuery } from "css-mediaquery";
 import { createMemoryHistory, MemoryHistoryBuildOptions } from "history";
@@ -36,6 +36,10 @@ export class Renderer<R extends RenderResult> {
 
   withChakraProvider() {
     return this.wrap({ Component: (props) => <ChakraProvider {...props} /> });
+  }
+
+  withColorModeProvider(options: ColorModeOptions) {
+    return this.wrap({ Component: (props) => <ColorModeProvider options={options} {...props} /> });
   }
 }
 

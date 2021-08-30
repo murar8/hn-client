@@ -1,3 +1,4 @@
+import { useColorModeValue } from "@chakra-ui/react";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { mockMatchMedia, Renderer } from "src/testUtils";
 import { Header } from "./Header";
@@ -7,19 +8,29 @@ const routes = [
   { name: "About", path: "/about" },
 ];
 
-const render = Renderer.create()
+const renderer = Renderer.create()
   .withRouter({ initialEntries: ["/About"] })
-  .withChakraProvider().render;
+  .withColorModeProvider({ initialColorMode: "light" })
+  .withChakraProvider();
 
-it("renders a header", async () => {
-  mockMatchMedia(1024);
-  render(<Header routes={routes} />);
-  expect(screen.getByLabelText("Toggle color mode")).toBeVisible();
-});
+function Component() {
+  const colorMode = useColorModeValue("light", "dark");
+
+  return (
+    <>
+      <Header routes={routes} />
+      <p>Color mode: {colorMode}</p>
+    </>
+  );
+}
+
+function setup(width: number) {
+  mockMatchMedia(width);
+  return renderer.render(<Component />);
+}
 
 it("renders the routes as a series of links on large monitors", async () => {
-  mockMatchMedia(1024);
-  render(<Header routes={routes} />);
+  setup(1024);
 
   expect(screen.getByText("Home")).toBeVisible();
   expect(screen.getByText("About")).toBeVisible();
@@ -27,12 +38,21 @@ it("renders the routes as a series of links on large monitors", async () => {
 });
 
 it("renders the routes as a menu on small monitors", async () => {
-  mockMatchMedia(368);
-  const { history } = render(<Header routes={routes} />);
+  const { history } = setup(368);
+
+  expect(screen.getByRole("menu", { hidden: true })).not.toBeVisible();
 
   fireEvent.click(screen.getByText("About"));
   const link = await waitFor(() => screen.queryByText("Home")!);
   fireEvent.click(link);
 
   expect(history.location.pathname).toEqual("/home");
+});
+
+it("toggles the color mode when clicking on the color mode button", async () => {
+  setup(368);
+
+  expect(screen.getByText("Color mode: light")).toBeVisible();
+  fireEvent.click(screen.getByLabelText("Toggle color mode"));
+  expect(screen.getByText("Color mode: dark")).toBeVisible();
 });
