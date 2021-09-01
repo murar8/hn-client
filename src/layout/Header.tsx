@@ -1,8 +1,7 @@
-import { ChevronDownIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import {
   Button,
   Divider,
-  HStack,
+  Flex,
   IconButton,
   Menu,
   MenuButton,
@@ -14,10 +13,10 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useMemo } from "react";
+import { FaChevronDown, FaMoon, FaSun } from "react-icons/fa";
 import { Link, matchPath, useLocation } from "react-router-dom";
-import { Route } from "src/config/routes";
 
-function useMatchingRouteIndex(routes: Route[]) {
+function useMatchingRouteIndex(routes: { name: string; path: string }[]) {
   const { pathname } = useLocation();
   const index = useMemo(() => routes.findIndex(({ path }) => matchPath(pathname, { path })), [routes, pathname]);
   return index !== -1 ? index : undefined;
@@ -25,7 +24,7 @@ function useMatchingRouteIndex(routes: Route[]) {
 
 function ColorModeButton() {
   const { toggleColorMode } = useColorMode();
-  const Icon = useColorModeValue(MoonIcon, SunIcon);
+  const Icon = useColorModeValue(FaMoon, FaSun);
   return <IconButton aria-label="Toggle color mode" icon={<Icon />} onClick={toggleColorMode} />;
 }
 
@@ -38,7 +37,7 @@ function LinkMenu({ routes }: LinkContainerProps) {
 
   return (
     <Menu matchWidth>
-      <MenuButton as={Button} flexGrow={1} me={8} rightIcon={<ChevronDownIcon />}>
+      <MenuButton as={Button} flexGrow={1} me={8} rightIcon={<FaChevronDown />}>
         {routeIndex ? routes[routeIndex].name : "Hacker News"}
       </MenuButton>
       <MenuList>
@@ -90,10 +89,10 @@ export function Header({ routes }: HeaderProps) {
 
   return (
     <header>
-      <HStack alignItems="center" spacing={2} p={3}>
+      <Flex p={3}>
         {LinkComponent && <LinkComponent routes={routes} />}
         <ColorModeButton />
-      </HStack>
+      </Flex>
       <Divider />
     </header>
   );
