@@ -23,7 +23,7 @@ beforeEach(() => {
   document.title = "";
 });
 
-it("should update the document title", async () => {
+it("updates the document title", async () => {
   const { history } = render(<Component />);
   await waitFor(() => expect(document.title).toEqual("Foo"));
   history.push("/bar");
