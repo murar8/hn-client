@@ -1,7 +1,7 @@
 import { HStack, Tag as ChakraTag, TagLabel, TagLeftIcon } from "@chakra-ui/react";
 import { ComponentType, useMemo } from "react";
 import { FaRegClock, FaRegCommentAlt, FaRegThumbsUp, FaRegUser } from "react-icons/fa";
-import { Item } from "src/api/api";
+import { Item } from "src/api";
 import { timestampToLocaleString } from "src/util";
 
 export type TagProps = {
@@ -11,7 +11,7 @@ export type TagProps = {
 
 export function Tag({ icon, label }: TagProps) {
   return (
-    <ChakraTag size="lg" variant="outline">
+    <ChakraTag size="lg" variant="outline" boxShadow="inset 0 0 0px 1px rgb(226 232 240 / 20%)">
       <TagLeftIcon as={icon} />
       <TagLabel>{label}</TagLabel>
     </ChakraTag>

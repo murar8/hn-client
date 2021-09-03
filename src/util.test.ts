@@ -42,6 +42,6 @@ describe(`${timestampToLocaleString.name}`, () => {
   });
 
   it("should display the hour and minute for dates less than a day from the present", () => {
-    expect(timestampToLocaleString(1118802340)).toEqual("Today, 6/15/2005, 2:25 AM");
+    expect(timestampToLocaleString(1118802340)).toEqual("Today, 2:25 AM");
   });
 });

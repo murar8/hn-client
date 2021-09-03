@@ -32,15 +32,19 @@ export function timestampToLocaleString(timestamp: number) {
 
   const prefix = isCurrentDay ? "Today, " : "";
 
-  const options: Intl.DateTimeFormatOptions = {
+  const dateOptions: Intl.DateTimeFormatOptions = {
     year: !isCurrentYear ? "numeric" : undefined,
     day: !isCurrentDay ? "numeric" : undefined,
     month: !isCurrentDay ? "numeric" : undefined,
-    hour: isCurrentDay ? "numeric" : undefined,
-    minute: isCurrentDay ? "numeric" : undefined,
   };
 
-  const dateString = date.toLocaleDateString(undefined, options);
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    timeStyle: "short",
+  };
+
+  const dateString = isCurrentDay
+    ? date.toLocaleTimeString(undefined, timeOptions)
+    : date.toLocaleDateString(undefined, dateOptions);
 
   return prefix + dateString;
 }

@@ -2,6 +2,7 @@ import {
   Button,
   Divider,
   Flex,
+  Icon,
   IconButton,
   Menu,
   MenuButton,
@@ -37,7 +38,7 @@ function LinkMenu({ routes }: LinkContainerProps) {
 
   return (
     <Menu matchWidth>
-      <MenuButton as={Button} flexGrow={1} me={8} rightIcon={<FaChevronDown />}>
+      <MenuButton as={Button} flexGrow={1} me={8} rightIcon={<Icon as={FaChevronDown} />}>
         {routeIndex ? routes[routeIndex].name : "Hacker News"}
       </MenuButton>
       <MenuList>
