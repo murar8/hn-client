@@ -4,12 +4,12 @@ import { FaRegClock, FaRegCommentAlt, FaRegThumbsUp, FaRegUser } from "react-ico
 import { Item } from "src/api";
 import { timestampToLocaleString } from "src/util";
 
-export type TagProps = {
+type TagProps = {
   icon: ComponentType;
   label: string;
 };
 
-export function Tag({ icon, label }: TagProps) {
+function Tag({ icon, label }: TagProps) {
   return (
     <ChakraTag size="lg" variant="outline" boxShadow="inset 0 0 0px 1px rgb(226 232 240 / 20%)">
       <TagLeftIcon as={icon} />

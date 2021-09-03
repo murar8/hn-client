@@ -39,7 +39,7 @@ function LinkMenu({ routes }: LinkContainerProps) {
   return (
     <Menu matchWidth>
       <MenuButton as={Button} flexGrow={1} me={8} rightIcon={<Icon as={FaChevronDown} />}>
-        {routeIndex ? routes[routeIndex].name : "Hacker News"}
+        {routeIndex ? routes[routeIndex].name : document.title || "Hacker News"}
       </MenuButton>
       <MenuList>
         {routes

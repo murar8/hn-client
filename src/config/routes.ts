@@ -53,7 +53,7 @@ export const routes: Route[] = [
   ...chartRoutes,
   {
     name: "Post",
-    path: "/item/:id",
+    path: "/item/:id(\\d+)",
     Component: PostPage,
   },
   {

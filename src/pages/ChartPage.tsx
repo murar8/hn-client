@@ -1,32 +1,14 @@
-import { Box, Center, Heading, Icon, Spinner, Stack, Text, useColorModeValue, VStack } from "@chakra-ui/react";
+import { Box, Center, Heading, Spinner, useColorModeValue, VStack } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
-import { FaExclamationTriangle } from "react-icons/fa";
 import { useHistory } from "react-router-dom";
 import { Virtuoso } from "react-virtuoso";
 import { Chart, fetchChart, fetchItems, Item } from "src/api";
+import { ErrorBanner } from "src/components/ErrorBanner";
 import { ItemData } from "src/components/ItemData";
 import { ShortLink } from "src/components/ShortLink";
 
 const INITIAL_BATCH_SIZE = 20;
 const LOAD_BATCH_SIZE = 10;
-
-type ErrorBannerProps = {
-  error: string;
-};
-
-function ErrorBanner({ error }: ErrorBannerProps) {
-  return (
-    <Stack direction={{ base: "column", sm: "row" }} spacing={{ base: 4, sm: 8 }} alignItems="center" p={4}>
-      <Icon as={FaExclamationTriangle} boxSize={12} />
-      <VStack spacing={{ base: 2, sm: 4 }} alignItems="flex-start">
-        <Heading size="md">An error occured</Heading>
-        <Text fontSize="md" p={2} ps={0} textAlign="center">
-          {error}
-        </Text>
-      </VStack>
-    </Stack>
-  );
-}
 
 function Loading() {
   return (
