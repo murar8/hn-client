@@ -80,16 +80,14 @@ export function ChartPage({ chart }: ChartPageProps) {
   }, [ids.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <Box maxW="6xl">
-      <Virtuoso
-        useWindowScroll
-        data={rows}
-        endReached={(lastIndex) => loadItems(lastIndex, LOAD_BATCH_SIZE)}
-        overscan={1200}
-        components={{ Header, Footer }}
-        itemContent={(_, data) => <Content {...data} />}
-      />
-    </Box>
+    <Virtuoso
+      useWindowScroll
+      data={rows}
+      endReached={(lastIndex) => loadItems(lastIndex, LOAD_BATCH_SIZE)}
+      overscan={1200}
+      components={{ Header, Footer }}
+      itemContent={(_, data) => <Content {...data} />}
+    />
   );
 }
 

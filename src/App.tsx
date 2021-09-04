@@ -1,4 +1,4 @@
-import { ChakraProvider, CSSReset } from "@chakra-ui/react";
+import { ChakraProvider, Container, CSSReset } from "@chakra-ui/react";
 import { BrowserRouter, Switch } from "react-router-dom";
 import { chartRoutes, routes } from "src/config/routes";
 import { theme } from "src/config/theme";
@@ -11,13 +11,15 @@ export function App() {
       <CSSReset />
       <BrowserRouter>
         <Header routes={chartRoutes} />
-        <Switch>
-          {routes.map(({ name, path, Component, exact }) => (
-            <NamedRoute key={path} name={name} path={path} exact={exact}>
-              <Component />
-            </NamedRoute>
-          ))}
-        </Switch>
+        <Container maxW="container.xl">
+          <Switch>
+            {routes.map(({ name, path, Component, exact }) => (
+              <NamedRoute key={path} name={name} path={path} exact={exact}>
+                <Component />
+              </NamedRoute>
+            ))}
+          </Switch>
+        </Container>
       </BrowserRouter>
     </ChakraProvider>
   );
