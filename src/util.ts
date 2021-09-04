@@ -49,6 +49,26 @@ export function timestampToLocaleString(timestamp: number) {
   return prefix + dateString;
 }
 
+const SI_UNITS = ["", "k", "M", "G", "T", "P", "E"].map((unit, i) => ({
+  unit,
+  divisor: Math.pow(1000, i),
+  ceiling: Math.pow(1000, i + 1),
+}));
+
+/**
+ * Format the supplied number into an abbreviated string with a unit suffix.
+ */
+export function numberToUnitString(n: number, precision: number = 1) {
+  if (!Number.isFinite(n)) return n.toString();
+  const abs = Math.abs(n);
+  const { unit, divisor } = SI_UNITS.find(({ ceiling }) => abs < ceiling) ?? SI_UNITS[SI_UNITS.length - 1];
+  const pow = Math.pow(10, precision);
+  const divided = abs / divisor;
+  const rounded = Math.floor((divided + Number.EPSILON) * pow) / pow;
+  const prefix = n < 0 ? "-" : "";
+  return prefix + rounded + unit;
+}
+
 /**
  * Generate vibrant, "evenly spaced" colours (i.e. no clustering).
  * See: http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript
