@@ -1,4 +1,4 @@
-import { HStack, Tag as ChakraTag, TagLabel, TagLeftIcon } from "@chakra-ui/react";
+import { HStack, SystemProps, Tag as ChakraTag, TagLabel, TagLeftIcon } from "@chakra-ui/react";
 import { ComponentType, useMemo } from "react";
 import { FaRegClock, FaRegCommentAlt, FaRegThumbsUp, FaRegUser } from "react-icons/fa";
 import { Item } from "src/api";
@@ -20,11 +20,11 @@ function Tag({ icon, label }: TagProps) {
 
 export type ItemDataProps = Pick<Item, "by" | "time" | "score" | "descendants">;
 
-export function ItemData({ by, time, score, descendants }: ItemDataProps) {
+export function ItemData({ by, time, score, descendants, ...props }: ItemDataProps & SystemProps) {
   const date = useMemo(() => (time ? timestampToLocaleString(time) : undefined), [time]);
 
   return (
-    <HStack spacing={4}>
+    <HStack spacing={4} {...props}>
       {by && <Tag icon={FaRegUser} label={by} />}
       {date && <Tag icon={FaRegClock} label={date} />}
       {score !== undefined && <Tag icon={FaRegThumbsUp} label={score.toString()} />}

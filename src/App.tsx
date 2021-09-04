@@ -12,8 +12,8 @@ export function App() {
       <BrowserRouter>
         <Header routes={chartRoutes} />
         <Switch>
-          {routes.map(({ name, path, Component }) => (
-            <NamedRoute key={path} name={name} path={path}>
+          {routes.map(({ name, path, Component, exact }) => (
+            <NamedRoute key={path} name={name} path={path} exact={exact}>
               <Component />
             </NamedRoute>
           ))}
