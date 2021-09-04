@@ -32,7 +32,7 @@ function Content({ title, text, url, id, ...item }: Item) {
       cursor="pointer"
       alignItems="flex-start"
       bgColor={bgColor}
-      onClick={() => history.push(`/item/${id}`)}
+      onClick={() => history.push(`/post/${id}`)}
     >
       {title && <Heading size="md">{title}</Heading>}
       {url && <ShortLink href={url} />}
