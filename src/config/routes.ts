@@ -7,13 +7,15 @@ import {
   ShowChartPage,
   TopChartPage,
 } from "src/pages/ChartPage";
-import { Home } from "src/pages/Home";
+import { FallbackPage } from "src/pages/FallbackPage";
+import { HomePage } from "src/pages/HomePage";
 import { PostPage } from "src/pages/PostPage";
 
 export type Route = {
   name: string;
   path: string;
   Component: ComponentType;
+  exact?: boolean;
 };
 
 export const chartRoutes: Route[] = [
@@ -59,6 +61,12 @@ export const routes: Route[] = [
   {
     name: "Home",
     path: "/",
-    Component: Home,
+    exact: true,
+    Component: HomePage,
+  },
+  {
+    name: "Page not found",
+    path: "*",
+    Component: FallbackPage,
   },
 ];

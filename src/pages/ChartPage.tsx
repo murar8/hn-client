@@ -21,6 +21,7 @@ function Loading() {
 function Content({ title, text, url, id, ...item }: Item) {
   const bgColor = useColorModeValue("gray.100", "gray.700");
   const history = useHistory();
+
   return (
     <VStack
       spacing={4}
@@ -50,7 +51,7 @@ export function ChartPage({ chart }: ChartPageProps) {
   const [error, setError] = useState<any | undefined>(undefined);
 
   const Header = useCallback(
-    () => (error ? <ErrorBanner error={error.message ?? error.toString()} /> : <></>),
+    () => (error ? <ErrorBanner p={4} error={error.message ?? error.toString()} /> : <></>),
     [error]
   );
 
