@@ -1,4 +1,4 @@
-import { Box, Center, Heading, Spinner, useColorModeValue, VStack } from "@chakra-ui/react";
+import { Box, Center, Heading, Spinner, VStack } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Virtuoso } from "react-virtuoso";
@@ -19,7 +19,6 @@ function Loading() {
 }
 
 function Content({ title, text, url, id, ...item }: Item) {
-  const bgColor = useColorModeValue("gray.100", "gray.700");
   const history = useHistory();
 
   return (
@@ -31,7 +30,10 @@ function Content({ title, text, url, id, ...item }: Item) {
       overflow="hidden"
       cursor="pointer"
       alignItems="flex-start"
-      bgColor={bgColor}
+      bgColor="blackAlpha.100"
+      borderWidth="1px"
+      borderColor="blackAlpha.500"
+      _hover={{ bgColor: "blackAlpha.300" }}
       onClick={() => history.push(`/post/${id}`)}
     >
       {title && <Heading size="md">{title}</Heading>}
