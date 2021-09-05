@@ -24,7 +24,7 @@ export function ItemData({ by, time, score, descendants, ...props }: ItemDataPro
   const date = useMemo(() => (time ? timestampToLocaleString(time) : undefined), [time]);
 
   return (
-    <HStack spacing={4} {...props}>
+    <HStack spacing={4}>
       {by && <Tag icon={FaRegUser} label={by} />}
       {date && <Tag icon={FaRegClock} label={date} />}
       {score !== undefined && <Tag icon={FaRegThumbsUp} label={score.toString()} />}
