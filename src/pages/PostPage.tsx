@@ -136,7 +136,7 @@ export function PostPage() {
   let { id } = useRouteMatch<{ id: string }>("/post/:id")!.params;
   let { data, error } = useSWR(id, () => fetchItem(parseInt(id)));
 
-  if (error) return <ErrorBanner error={error.message ?? error.toString()} />;
+  if (error) return <ErrorBanner pt={4} error={error} />;
   if (!data) return <Loader size="xl" p={4} />;
 
   const { title, url, text, parts, kids, ...item } = data;

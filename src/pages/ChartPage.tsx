@@ -46,10 +46,7 @@ export function ChartPage({ chart }: ChartPageProps) {
   const [rows, setRows] = useState<Item[]>([]);
   const [error, setError] = useState<any | undefined>(undefined);
 
-  const Header = useCallback(
-    () => (error ? <ErrorBanner p={4} error={error.message ?? error.toString()} /> : <></>),
-    [error]
-  );
+  const Header = useCallback(() => (error ? <ErrorBanner p={4} error={error} /> : <></>), [error]);
 
   const Footer = useCallback(
     () => ((!ids.length && !error) || ids.length > rows.length ? <Loader size="xl" p={4} /> : <Box h={1} />),
