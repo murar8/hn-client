@@ -11,23 +11,16 @@ export function ErrorBanner({ error, ...props }: ErrorBannerProps) {
   const bgColor = useColorModeValue("red.500", "red.300");
 
   return (
-    <Stack
-      bgColor={bgColor}
-      direction={{ base: "column", sm: "row" }}
-      spacing={4}
-      justifyContent="center"
-      alignItems="center"
-      {...props}
-    >
-      <Icon as={FaExclamationTriangle} boxSize={12} />
-      <VStack spacing={2} alignItems="center">
+    <VStack bgColor={bgColor} spacing={2} alignItems="center" {...props}>
+      <Stack direction={{ base: "column", sm: "row" }} spacing={4} justifyContent="center" alignItems="center">
+        <Icon as={FaExclamationTriangle} boxSize={12} />
         <Heading size="md" textAlign="center">
           An error occured
         </Heading>
-        <Text fontSize="md" textAlign="center">
-          {message}
-        </Text>
-      </VStack>
-    </Stack>
+      </Stack>
+      <Text fontSize="md" textAlign="center" overflowWrap="anywhere">
+        {message}
+      </Text>
+    </VStack>
   );
 }
