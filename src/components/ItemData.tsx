@@ -26,9 +26,11 @@ function Tag({ icon, label, variant, ...props }: TagProps) {
   );
 }
 
-export type ItemDataProps = Pick<Item, "by" | "time" | "score" | "descendants"> & Pick<ChakraTagProps, "variant">;
+export type ItemDataProps = SystemProps &
+  Pick<Item, "by" | "time" | "score" | "descendants"> &
+  Pick<ChakraTagProps, "variant">;
 
-export function ItemData({ variant, by, time, score, descendants, ...props }: ItemDataProps & SystemProps) {
+export function ItemData({ variant, by, time, score, descendants, ...props }: ItemDataProps) {
   const timeLabel = useMemo(() => (time ? timestampToLocaleString(time) : undefined), [time]);
   const scoreLabel = useMemo(() => (score ? numberToUnitString(score) : undefined), [score]);
   const descendantsLabel = useMemo(() => (descendants ? numberToUnitString(descendants) : undefined), [descendants]);
