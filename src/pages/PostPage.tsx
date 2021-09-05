@@ -57,7 +57,8 @@ function CommentTree({ ids, nested = false }: CommentTreeProps) {
   useEffect(() => {
     fetchItems(ids.slice(items.length, limit))
       .then((data) => {
-        setItems([...items, ...data]);
+        const filtered = data.filter((item) => item.text?.length);
+        setItems([...items, ...filtered]);
       })
       .catch(setError);
   }, [limit]); // eslint-disable-line react-hooks/exhaustive-deps
