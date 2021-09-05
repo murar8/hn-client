@@ -4,6 +4,7 @@ import {
   Flex,
   Icon,
   IconButton,
+  Link as ChakraLink,
   Menu,
   MenuButton,
   MenuItem,
@@ -14,7 +15,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useMemo } from "react";
-import { FaChevronDown, FaMoon, FaSun } from "react-icons/fa";
+import { FaChevronDown, FaGithub, FaMoon, FaSun } from "react-icons/fa";
 import { Link, matchPath, useLocation } from "react-router-dom";
 
 function useMatchingRouteIndex(routes: { name: string; path: string }[]) {
@@ -93,6 +94,14 @@ export function Header({ routes }: HeaderProps) {
       <Flex p={3}>
         {LinkComponent && <LinkComponent routes={routes} />}
         <ColorModeButton />
+        <IconButton
+          ms={2}
+          as={ChakraLink}
+          isExternal
+          href="https://github.com/murar8/hn-client"
+          aria-label="Open project source"
+          icon={<Icon as={FaGithub} />}
+        />
       </Flex>
       <Divider />
     </header>
