@@ -1,34 +1,48 @@
-import { Flex, SystemProps, Tag as ChakraTag, TagLabel, TagLeftIcon } from "@chakra-ui/react";
+import {
+  Flex,
+  SystemProps,
+  Tag as ChakraTag,
+  TagLabel,
+  TagLeftIcon,
+  TagProps as ChakraTagProps,
+} from "@chakra-ui/react";
 import { ComponentType, useMemo } from "react";
 import { FaRegClock, FaRegCommentAlt, FaRegThumbsUp, FaRegUser } from "react-icons/fa";
+import { IconType } from "react-icons/lib";
 import { Item } from "src/api";
-import { timestampToLocaleString } from "src/util";
+import { numberToUnitString, timestampToLocaleString } from "src/util";
 
-type TagProps = {
+type TagProps = Omit<ChakraTagProps, "children"> & {
   icon: ComponentType;
   label: string;
 };
 
-function Tag({ icon, label }: TagProps) {
+function Tag({ icon, label, variant, ...props }: TagProps) {
   return (
-    <ChakraTag size="lg" variant="outline">
+    <ChakraTag size="lg" variant={variant} {...props}>
       <TagLeftIcon as={icon} />
       <TagLabel overflow="visible">{label}</TagLabel>
     </ChakraTag>
   );
 }
 
-export type ItemDataProps = Pick<Item, "by" | "time" | "score" | "descendants">;
+export type ItemDataProps = Pick<Item, "by" | "time" | "score" | "descendants"> & Pick<ChakraTagProps, "variant">;
 
-export function ItemData({ by, time, score, descendants, ...props }: ItemDataProps & SystemProps) {
-  const date = useMemo(() => (time ? timestampToLocaleString(time) : undefined), [time]);
+export function ItemData({ variant, by, time, score, descendants, ...props }: ItemDataProps & SystemProps) {
+  const timeLabel = useMemo(() => (time ? timestampToLocaleString(time) : undefined), [time]);
+  const scoreLabel = useMemo(() => (score ? numberToUnitString(score) : undefined), [score]);
+  const descendantsLabel = useMemo(() => (descendants ? numberToUnitString(descendants) : undefined), [descendants]);
+
+  const tags: [IconType, string | undefined][] = [
+    [FaRegUser, by],
+    [FaRegClock, timeLabel],
+    [FaRegThumbsUp, scoreLabel],
+    [FaRegCommentAlt, descendantsLabel],
+  ];
 
   return (
-    <Flex sx={{ gap: "8px" }} flexWrap="wrap" {...props}>
-      {by && <Tag icon={FaRegUser} label={by} />}
-      {date && <Tag icon={FaRegClock} label={date} />}
-      {score !== undefined && <Tag icon={FaRegThumbsUp} label={score.toString()} />}
-      {descendants !== undefined && <Tag icon={FaRegCommentAlt} label={descendants.toString()} />}
+    <Flex sx={{ gap: "16px" }} flexWrap="wrap" {...props}>
+      {tags.map(([icon, label], i) => label && <Tag key={i} variant={variant} icon={icon} label={label} />)}
     </Flex>
   );
 }

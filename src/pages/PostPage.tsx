@@ -20,7 +20,7 @@ function Comment({ text, id, kids, ...item }: Item) {
   return (
     <VStack spacing={4} alignItems="stretch" _notFirst={{ pt: 8 }} ps={4} borderColor={`${baseColor}.100`}>
       <Flex justifyContent="space-between" alignItems="center" pe={4}>
-        <ItemData {...item} />
+        <ItemData variant="ghost" {...item} />
         {kids?.length && (
           <IconButton
             variant="ghost"
@@ -147,7 +147,7 @@ export function PostPage() {
       {url && <ShortLink href={url} />}
       {text && <Text fontSize="lg" dangerouslySetInnerHTML={{ __html: text }} />}
       {parts && <PollOpts ids={parts} />}
-      <ItemData {...item} />
+      <ItemData variant="outline" {...item} />
       {kids && <CommentTree ids={kids} />}
     </VStack>
   );

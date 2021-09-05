@@ -32,7 +32,7 @@ function Content({ title, text, url, id, ...item }: Item) {
     >
       {title && <Heading size="md">{title}</Heading>}
       {url && <ShortLink href={url} />}
-      <ItemData {...item} />
+      <ItemData variant="outline" {...item} />
     </VStack>
   );
 }
