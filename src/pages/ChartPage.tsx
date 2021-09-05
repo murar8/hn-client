@@ -1,6 +1,6 @@
 import { Box, Heading, useColorModeValue, VStack } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Virtuoso } from "react-virtuoso";
 import { Chart, fetchChart, fetchItems, Item } from "src/api";
 import { ErrorBanner } from "src/components/ErrorBanner";
@@ -12,7 +12,6 @@ const INITIAL_BATCH_SIZE = 20;
 const LOAD_BATCH_SIZE = 10;
 
 function Content({ title, text, url, id, ...item }: Item) {
-  const history = useHistory();
   const baseColor = useColorModeValue("blackAlpha", "whiteAlpha");
 
   return (
