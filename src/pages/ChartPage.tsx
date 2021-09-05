@@ -1,39 +1,33 @@
-import { Box, Center, Heading, Spinner, VStack } from "@chakra-ui/react";
+import { Box, Heading, useColorModeValue, VStack } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Virtuoso } from "react-virtuoso";
 import { Chart, fetchChart, fetchItems, Item } from "src/api";
 import { ErrorBanner } from "src/components/ErrorBanner";
 import { ItemData } from "src/components/ItemData";
+import { Loader } from "src/components/Loader";
 import { ShortLink } from "src/components/ShortLink";
 
 const INITIAL_BATCH_SIZE = 20;
 const LOAD_BATCH_SIZE = 10;
 
-function Loading() {
-  return (
-    <Center p={4}>
-      <Spinner size="xl" />
-    </Center>
-  );
-}
-
 function Content({ title, text, url, id, ...item }: Item) {
   const history = useHistory();
+  const baseColor = useColorModeValue("blackAlpha", "whiteAlpha");
 
   return (
     <VStack
       spacing={4}
-      m={4}
+      my={4}
       p={4}
       borderRadius="lg"
       overflow="hidden"
       cursor="pointer"
       alignItems="flex-start"
-      bgColor="blackAlpha.100"
       borderWidth="1px"
-      borderColor="blackAlpha.500"
-      _hover={{ bgColor: "blackAlpha.300" }}
+      borderColor={`${baseColor}.500`}
+      bgColor={`${baseColor}.100`}
+      _hover={{ bgColor: `${baseColor}.300` }}
       onClick={() => history.push(`/post/${id}`)}
     >
       {title && <Heading size="md">{title}</Heading>}
@@ -58,7 +52,7 @@ export function ChartPage({ chart }: ChartPageProps) {
   );
 
   const Footer = useCallback(
-    () => ((!ids.length && !error) || ids.length > rows.length ? <Loading /> : <Box h={1} />),
+    () => ((!ids.length && !error) || ids.length > rows.length ? <Loader size="xl" p={4} /> : <Box h={1} />),
     [ids.length, rows.length, error]
   );
 

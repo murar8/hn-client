@@ -1,4 +1,4 @@
-import { HStack, SystemProps, Tag as ChakraTag, TagLabel, TagLeftIcon } from "@chakra-ui/react";
+import { Flex, SystemProps, Tag as ChakraTag, TagLabel, TagLeftIcon } from "@chakra-ui/react";
 import { ComponentType, useMemo } from "react";
 import { FaRegClock, FaRegCommentAlt, FaRegThumbsUp, FaRegUser } from "react-icons/fa";
 import { Item } from "src/api";
@@ -11,9 +11,9 @@ type TagProps = {
 
 function Tag({ icon, label }: TagProps) {
   return (
-    <ChakraTag size="lg" variant="outline" boxShadow="inset 0 0 0px 1px rgb(226 232 240 / 20%)">
+    <ChakraTag size="lg" variant="outline">
       <TagLeftIcon as={icon} />
-      <TagLabel>{label}</TagLabel>
+      <TagLabel overflow="visible">{label}</TagLabel>
     </ChakraTag>
   );
 }
@@ -24,11 +24,11 @@ export function ItemData({ by, time, score, descendants, ...props }: ItemDataPro
   const date = useMemo(() => (time ? timestampToLocaleString(time) : undefined), [time]);
 
   return (
-    <HStack spacing={4}>
+    <Flex sx={{ gap: "8px" }} flexWrap="wrap" {...props}>
       {by && <Tag icon={FaRegUser} label={by} />}
       {date && <Tag icon={FaRegClock} label={date} />}
       {score !== undefined && <Tag icon={FaRegThumbsUp} label={score.toString()} />}
       {descendants !== undefined && <Tag icon={FaRegCommentAlt} label={descendants.toString()} />}
-    </HStack>
+    </Flex>
   );
 }
