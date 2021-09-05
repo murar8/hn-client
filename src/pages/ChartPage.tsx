@@ -1,6 +1,6 @@
 import { Box, Heading, useColorModeValue, VStack } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Virtuoso } from "react-virtuoso";
 import { Chart, fetchChart, fetchItems, Item } from "src/api";
 import { ErrorBanner } from "src/components/ErrorBanner";
@@ -17,6 +17,8 @@ function Content({ title, text, url, id, ...item }: Item) {
 
   return (
     <VStack
+      as={Link}
+      to={`/post/${id}`}
       spacing={4}
       my={4}
       p={4}
@@ -28,7 +30,6 @@ function Content({ title, text, url, id, ...item }: Item) {
       borderColor={`${baseColor}.500`}
       bgColor={`${baseColor}.100`}
       _hover={{ bgColor: `${baseColor}.300` }}
-      onClick={() => history.push(`/post/${id}`)}
     >
       {title && <Heading size="md">{title}</Heading>}
       {url && <ShortLink href={url} />}
