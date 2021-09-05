@@ -10,8 +10,8 @@ import { ShortLink } from "src/components/ShortLink";
 import { numberToUnitString, rainbow } from "src/util";
 import useSWR from "swr";
 
-const INITIAL_BATCH_SIZE = 20;
-const LOAD_BATCH_SIZE = 10;
+const INITIAL_BATCH_SIZE = 10;
+const LOAD_BATCH_SIZE = 5;
 
 function Comment({ text, id, kids, ...item }: Item) {
   const baseColor = useColorModeValue("blackAlpha", "whiteAlpha");
@@ -49,7 +49,7 @@ type CommentTreeProps = {
 };
 
 function CommentTree({ ids, nested = false }: CommentTreeProps) {
-  const [limit, setLimit] = useState(INITIAL_BATCH_SIZE);
+  const [limit, setLimit] = useState(nested ? LOAD_BATCH_SIZE : INITIAL_BATCH_SIZE);
   const [items, setItems] = useState<Item[]>([]);
   const [error, setError] = useState<any | undefined>(undefined);
   const baseColor = useColorModeValue("blackAlpha", "whiteAlpha");
@@ -57,8 +57,7 @@ function CommentTree({ ids, nested = false }: CommentTreeProps) {
   useEffect(() => {
     fetchItems(ids.slice(items.length, limit))
       .then((data) => {
-        const filtered = data.filter((item) => item.text?.length);
-        setItems([...items, ...filtered]);
+        setItems([...items, ...data]);
       })
       .catch(setError);
   }, [limit]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -69,13 +68,13 @@ function CommentTree({ ids, nested = false }: CommentTreeProps) {
       alignItems="stretch"
       w="100%"
       py={nested ? undefined : 4}
-      bgColor={nested ? undefined : `${baseColor}.100`}
+      bgColor={nested ? undefined : `${baseColor}.50`}
       borderColor={nested ? undefined : `${baseColor}.500`}
       borderRadius={nested ? undefined : "lg"}
       borderWidth={nested ? undefined : "1px"}
       borderStartWidth="1px"
     >
-      {items.length > 0 && items.map((item) => <Comment key={item.id} {...item} />)}
+      {items.length > 0 && items.map((item) => (item.text?.length ?? 0) > 0 && <Comment key={item.id} {...item} />)}
       {items.length < ids.length && (
         <Button
           isLoading={!error && items.length < limit}
