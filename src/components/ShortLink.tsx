@@ -1,12 +1,12 @@
-import { Icon, Link, SystemProps } from "@chakra-ui/react";
+import { ChakraProps, Icon, Link } from "@chakra-ui/react";
 import { FaLink } from "react-icons/fa";
 import { baseURL } from "src/util";
 
-export type ShortLinkProps = {
+export type ShortLinkProps = ChakraProps & {
   href: string;
 };
 
-export function ShortLink({ href, ...props }: ShortLinkProps & SystemProps) {
+export function ShortLink({ href, ...props }: ShortLinkProps) {
   return (
     <Link
       color="grey"

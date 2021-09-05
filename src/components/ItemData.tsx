@@ -1,6 +1,6 @@
 import {
+  ChakraProps,
   Flex,
-  SystemProps,
   Tag as ChakraTag,
   TagLabel,
   TagLeftIcon,
@@ -26,11 +26,11 @@ function Tag({ icon, label, variant, ...props }: TagProps) {
   );
 }
 
-export type ItemDataProps = SystemProps &
+export type ItemDataProps = ChakraProps &
   Pick<Item, "by" | "time" | "score" | "descendants"> &
   Pick<ChakraTagProps, "variant">;
 
-export function ItemData({ variant, by, time, score, descendants, ...props }: ItemDataProps) {
+export function ItemData({ variant, by, time, score, descendants, sx, ...props }: ItemDataProps) {
   const timeLabel = useMemo(() => (time ? timestampToLocaleString(time) : undefined), [time]);
   const scoreLabel = useMemo(() => (score ? numberToUnitString(score) : undefined), [score]);
   const descendantsLabel = useMemo(() => (descendants ? numberToUnitString(descendants) : undefined), [descendants]);
@@ -43,7 +43,7 @@ export function ItemData({ variant, by, time, score, descendants, ...props }: It
   ];
 
   return (
-    <Flex sx={{ gap: "16px" }} flexWrap="wrap" {...props}>
+    <Flex sx={{ gap: "16px", ...sx }} flexWrap="wrap" {...props}>
       {tags.map(([icon, label], i) => label && <Tag key={i} variant={variant} icon={icon} label={label} />)}
     </Flex>
   );

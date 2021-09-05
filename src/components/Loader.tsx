@@ -1,6 +1,6 @@
-import { Center, Spinner, SystemProps, ThemingProps } from "@chakra-ui/react";
+import { Center, ChakraProps, Spinner, ThemingProps } from "@chakra-ui/react";
 
-export type LoaderProps = SystemProps & { size?: ThemingProps<"spinner">["size"] };
+export type LoaderProps = ChakraProps & { size?: ThemingProps<"spinner">["size"] };
 
 export function Loader({ size, ...props }: LoaderProps) {
   return (
