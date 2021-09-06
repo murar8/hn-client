@@ -4,7 +4,7 @@ import { Center } from "@chakra-ui/react";
 export function FallbackPage() {
   return (
     <Center p={4}>
-      <Heading size="2xl">404</Heading>
+      <Heading size="2xl">404 - Page not found.</Heading>
     </Center>
   );
 }
