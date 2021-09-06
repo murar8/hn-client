@@ -1,30 +1,10 @@
-import {
-  ChakraProps,
-  Flex,
-  Tag as ChakraTag,
-  TagLabel,
-  TagLeftIcon,
-  TagProps as ChakraTagProps,
-} from "@chakra-ui/react";
-import { ComponentType, useMemo } from "react";
+import { ChakraProps, Flex, TagProps as ChakraTagProps } from "@chakra-ui/react";
+import { useMemo } from "react";
 import { FaRegClock, FaRegCommentAlt, FaRegThumbsUp, FaRegUser } from "react-icons/fa";
 import { IconType } from "react-icons/lib";
 import { Item } from "src/api";
 import { numberToUnitString, timestampToLocaleString } from "src/util";
-
-type TagProps = Omit<ChakraTagProps, "children"> & {
-  icon: ComponentType;
-  label: string;
-};
-
-function Tag({ icon, label, variant, ...props }: TagProps) {
-  return (
-    <ChakraTag size="lg" variant={variant} {...props}>
-      <TagLeftIcon as={icon} />
-      <TagLabel overflow="visible">{label}</TagLabel>
-    </ChakraTag>
-  );
-}
+import { IconTag } from "./IconTag";
 
 export type ItemDataProps = ChakraProps &
   Pick<Item, "by" | "time" | "score" | "descendants"> &
@@ -44,7 +24,7 @@ export function ItemData({ variant, by, time, score, descendants, sx, ...props }
 
   return (
     <Flex sx={{ gap: "16px", ...sx }} flexWrap="wrap" {...props}>
-      {tags.map(([icon, label], i) => label && <Tag key={i} variant={variant} icon={icon} label={label} />)}
+      {tags.map(([icon, label], i) => label && <IconTag key={i} variant={variant} Icon={icon} label={label} />)}
     </Flex>
   );
 }

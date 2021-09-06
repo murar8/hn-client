@@ -25,7 +25,7 @@ beforeEach(() => {
 
 it("updates the document title", async () => {
   const { history } = render(<Component />);
-  await waitFor(() => expect(document.title).toEqual("Foo"));
+  expect(document.title).toEqual("Foo");
   history.push("/bar");
   await waitFor(() => expect(document.title).toEqual("Bar"));
 });
