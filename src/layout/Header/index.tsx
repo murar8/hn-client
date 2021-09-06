@@ -5,55 +5,24 @@ import {
   Icon,
   IconButton,
   Link as ChakraLink,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   Spacer,
   useBreakpointValue,
-  useColorMode,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import { useMemo } from "react";
-import { FaChevronDown, FaGithub, FaMoon, FaSun } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa";
 import { Link, matchPath, useLocation } from "react-router-dom";
+import { ColorModeButton } from "./ColorModeButton";
+import { NavigationMenu, NavigationMenuProps } from "./NavigationMenu";
 
-function useMatchingRouteIndex(routes: { name: string; path: string }[]) {
+export function useMatchingRouteIndex(routes: { name: string; path: string }[]) {
   const { pathname } = useLocation();
   const index = useMemo(() => routes.findIndex(({ path }) => matchPath(pathname, { path })), [routes, pathname]);
   return index !== -1 ? index : undefined;
 }
 
-function ColorModeButton() {
-  const { toggleColorMode } = useColorMode();
-  const Icon = useColorModeValue(FaMoon, FaSun);
-  return <IconButton aria-label="Toggle color mode" icon={<Icon />} onClick={toggleColorMode} />;
-}
-
-type LinkContainerProps = {
+export type LinkContainerProps = {
   routes: { name: string; path: string }[];
 };
-
-function LinkMenu({ routes }: LinkContainerProps) {
-  const routeIndex = useMatchingRouteIndex(routes);
-
-  return (
-    <Menu matchWidth>
-      <MenuButton as={Button} flexGrow={1} me={8} rightIcon={<Icon as={FaChevronDown} />}>
-        {routeIndex ? routes[routeIndex].name : document.title || "Hacker News"}
-      </MenuButton>
-      <MenuList>
-        {routes
-          .filter((_, i) => i !== routeIndex)
-          .map(({ name, path }) => (
-            <MenuItem key={path} as={Link} to={path}>
-              {name}
-            </MenuItem>
-          ))}
-      </MenuList>
-    </Menu>
-  );
-}
 
 function LinkBar({ routes }: LinkContainerProps) {
   const routeIndex = useMatchingRouteIndex(routes);
@@ -85,7 +54,7 @@ export type HeaderProps = {
 
 export function Header({ routes }: HeaderProps) {
   const LinkComponent = useBreakpointValue({
-    base: LinkMenu,
+    base: (props: NavigationMenuProps) => <NavigationMenu {...props} flexGrow={1} me={8} />,
     md: LinkBar,
   });
 
