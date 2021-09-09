@@ -4,6 +4,7 @@ import { match as matchMediaQuery } from "css-mediaquery";
 import { createMemoryHistory, MemoryHistoryBuildOptions } from "history";
 import { ComponentType, ReactElement } from "react";
 import { Router } from "react-router-dom";
+import { SWRConfig } from "swr";
 
 export type Payload = { [key: string]: unknown };
 export type Wrapper<P extends Payload> = { Component: ComponentType; payload?: P };
@@ -40,6 +41,10 @@ export class Renderer<R extends RenderResult> {
 
   withColorModeProvider(options: ColorModeOptions) {
     return this.wrap({ Component: (props) => <ColorModeProvider options={options} {...props} /> });
+  }
+
+  withSWRConfig(value: Parameters<typeof SWRConfig>[0]["value"] = { provider: () => new Map() }) {
+    return this.wrap({ Component: (props) => <SWRConfig value={value} {...props} /> });
   }
 }
 

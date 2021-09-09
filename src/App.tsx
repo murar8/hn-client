@@ -11,7 +11,7 @@ export function App() {
       <CSSReset />
       <BrowserRouter>
         <Header routes={chartRoutes} />
-        <Container maxW="container.xl">
+        <Container maxW="container.xl" p={0}>
           <Switch>
             {routes.map(({ name, path, Component, exact }) => (
               <NamedRoute key={path} name={name} path={path} exact={exact}>
