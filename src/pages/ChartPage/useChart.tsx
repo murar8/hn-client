@@ -6,7 +6,7 @@ import useSWRInfinite from "swr/infinite";
 export function useChart(chart: Chart, batchSize: number, initialBatchSize: number = batchSize) {
   const { data: ids, error: chartError } = useSWR(chart, () => fetchChart(chart));
 
-  const getKey = (size: number) => [ids![size]];
+  const getKey = (index: number) => [ids![index]];
   const fetcher = (id: number) => fetchItem(id);
   const config = { initialSize: 0 };
   const { data: items, error: itemsError, size, setSize } = useSWRInfinite(getKey, fetcher, config);

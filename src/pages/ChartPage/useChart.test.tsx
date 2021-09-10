@@ -11,13 +11,11 @@ function Component() {
 
   return (
     <div>
-      <section role="list">
-        {items?.map(({ id, title }) => (
-          <p key={id} role="listitem">
-            {title}
-          </p>
-        ))}
-      </section>
+      {items?.map(({ id, title }) => (
+        <p key={id} role="listitem">
+          {title}
+        </p>
+      ))}
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
       <button onClick={loadMore}>Load more</button>
@@ -26,10 +24,8 @@ function Component() {
 }
 
 async function setup() {
-  Renderer.create()
-    .withSWRConfig()
-    .render(<Component />);
-
+  const renderer = Renderer.create().withSWRConfig();
+  renderer.render(<Component />);
   await waitFor(() => expect(screen.queryByText("Loading...")).toBeNull());
 }
 
@@ -45,7 +41,7 @@ beforeAll(() => {
 
 it("provides a list of items", async () => {
   await setup();
-  await waitFor(() => expect(screen.getAllByRole("listitem")).toHaveLength(20));
+  await waitFor(() => expect(screen.getAllByText(/Post #\d+/)).toHaveLength(20));
   expect(screen.getByText("Post #0")).toBeVisible();
   expect(screen.getByText("Post #19000")).toBeVisible();
 });
@@ -53,7 +49,7 @@ it("provides a list of items", async () => {
 it("provides more items on demand", async () => {
   await setup();
   fireEvent.click(screen.getByText("Load more"));
-  await waitFor(() => expect(screen.getAllByRole("listitem")).toHaveLength(25));
+  await waitFor(() => expect(screen.getAllByText(/Post #\d+/)).toHaveLength(25));
   expect(screen.getByText("Post #20000")).toBeVisible();
   expect(screen.getByText("Post #24000")).toBeVisible();
 });
@@ -65,7 +61,7 @@ it("does not load more items when the bottom of the list is reached", async () =
     fireEvent.click(screen.getByText("Load more"));
   }
 
-  await waitFor(() => expect(screen.getAllByRole("listitem")).toHaveLength(100));
+  await waitFor(() => expect(screen.getAllByText(/Post #\d+/)).toHaveLength(100));
 });
 
 [fetchChart, fetchItem].forEach((fetchFn) => {
