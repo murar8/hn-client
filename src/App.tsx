@@ -12,22 +12,22 @@ const PostPage = lazy(() => import("src/pages/PostPage"));
 const HomePage = lazy(() => import("src/pages/HomePage"));
 const FallbackPage = lazy(() => import("src/pages/FallbackPage"));
 
-const headerRoutes: { name: string; path: string }[] = [
-  { name: "Best", path: "/best" },
-  { name: "New", path: "/new" },
-  { name: "Top", path: "/top" },
-  { name: "Ask", path: "/ask" },
-  { name: "Show", path: "/show" },
-  { name: "Jobs", path: "/jobs" },
-];
-
 export function App() {
   return (
     <ChakraProvider theme={theme}>
       <CSSReset />
       <BrowserRouter>
-        <Flex flexDir="column" minHeight="100%" boxSizing="border-box">
-          <Header routes={headerRoutes} />
+        <Flex flexDir="column" minHeight="100%">
+          <Header
+            routes={[
+              { name: "Best", path: "/best" },
+              { name: "New", path: "/new" },
+              { name: "Top", path: "/top" },
+              { name: "Ask", path: "/ask" },
+              { name: "Show", path: "/show" },
+              { name: "Jobs", path: "/jobs" },
+            ]}
+          />
           <Container maxW="container.xl" p={0} flexGrow={1}>
             <Suspense fallback={<Loader size="xl" p={4} />}>
               <Switch>
