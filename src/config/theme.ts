@@ -1,4 +1,5 @@
 import { extendTheme } from "@chakra-ui/react";
+import { mode, transparentize } from "@chakra-ui/theme-tools";
 
 export const theme = extendTheme({
   config: {
@@ -14,11 +15,12 @@ export const theme = extendTheme({
   components: {
     Tag: {
       variants: {
-        ghost: {
+        ghost: (props) => ({
           container: {
+            textColor: mode(`${props.colorScheme}.500`, transparentize(`${props.colorScheme}.200`, 0.8))(props),
             paddingInline: 0,
           },
-        },
+        }),
       },
     },
   },

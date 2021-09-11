@@ -15,16 +15,19 @@ export function ItemData({ variant, by, time, score, descendants, sx, ...props }
   const scoreLabel = useMemo(() => (score ? numberToUnitString(score) : undefined), [score]);
   const descendantsLabel = useMemo(() => (descendants ? numberToUnitString(descendants) : undefined), [descendants]);
 
-  const tags: [IconType, string | undefined][] = [
-    [FaRegUser, by],
-    [FaRegClock, timeLabel],
-    [FaRegThumbsUp, scoreLabel],
-    [FaRegCommentAlt, descendantsLabel],
+  const tags: [IconType, string | undefined, string][] = [
+    [FaRegUser, by, "blue"],
+    [FaRegClock, timeLabel, "purple"],
+    [FaRegThumbsUp, scoreLabel, "green"],
+    [FaRegCommentAlt, descendantsLabel, "teal"],
   ];
 
   return (
     <Flex sx={{ gap: "16px", ...sx }} flexWrap="wrap" {...props}>
-      {tags.map(([icon, label], i) => label && <IconTag key={i} variant={variant} Icon={icon} label={label} />)}
+      {tags.map(
+        ([Icon, label, colorScheme], i) =>
+          label && <IconTag key={i} variant={variant} Icon={Icon} label={label} colorScheme={colorScheme} />
+      )}
     </Flex>
   );
 }
