@@ -1,9 +1,9 @@
-import { Grid, Icon, Text } from "@chakra-ui/react";
+import { Grid, Icon, Text, useColorModeValue } from "@chakra-ui/react";
 import { Fragment, useMemo } from "react";
 import { FaExclamationTriangle } from "react-icons/fa";
 import { fetchItems } from "src/api";
 import { Loader } from "src/components/Loader";
-import { numberToUnitString, rainbow } from "src/util";
+import { numberToUnitString } from "src/util";
 import useSWR from "swr";
 
 type PollOptsProps = {
@@ -11,9 +11,10 @@ type PollOptsProps = {
 };
 
 export function PollOpts({ ids }: PollOptsProps) {
-  let { data, error } = useSWR(ids, () => fetchItems(ids));
+  const { data, error } = useSWR(ids, () => fetchItems(ids));
+  const saturation = useColorModeValue("50%", "40%");
 
-  let filtered = useMemo(
+  const filtered = useMemo(
     () =>
       data
         ?.filter((item) => item.text && item.score !== undefined)
@@ -35,7 +36,7 @@ export function PollOpts({ ids }: PollOptsProps) {
             borderWidth="1px"
             borderRadius="lg"
             textAlign="center"
-            borderColor={rainbow(filtered!.length, i)}
+            borderColor={`hsl(${(120 * (filtered!.length - i)) / filtered!.length},100%,${saturation})`}
           >
             {score}
           </Text>
