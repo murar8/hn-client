@@ -1,4 +1,5 @@
 import { Divider, Heading, Text, VStack } from "@chakra-ui/react";
+import { useErrorHandler } from "react-error-boundary";
 import { useRouteMatch } from "react-router-dom";
 import { fetchItem } from "src/api";
 import { ItemData } from "src/components/ItemData";
@@ -28,7 +29,4 @@ export default function PostPage() {
       {kids && <CommentTree ids={kids} />}
     </VStack>
   );
-}
-function useErrorHandler(error: any) {
-  throw new Error("Function not implemented.");
 }
