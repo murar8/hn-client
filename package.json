@@ -56,7 +56,11 @@
     ]
   },
   "jest": {
-    "resetMocks": false
+    "resetMocks": false,
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/src/index\\.(ts|tsx|js|jsx)",
+      "<rootDir>/src/config/.*\\.(ts|tsx|js|jsx)"
+    ]
   },
   "husky": {
     "hooks": {
