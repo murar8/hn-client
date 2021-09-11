@@ -1,4 +1,4 @@
-import { Heading, Text, VStack } from "@chakra-ui/react";
+import { Divider, Heading, Text, VStack } from "@chakra-ui/react";
 import { useRouteMatch } from "react-router-dom";
 import { fetchItem } from "src/api";
 import { ErrorBanner } from "src/components/ErrorBanner";
@@ -25,6 +25,7 @@ export function PostPage() {
       {text && <Text fontSize="lg" dangerouslySetInnerHTML={{ __html: text }} />}
       {parts && <PollOpts ids={parts} />}
       <ItemData variant="outline" {...item} />
+      <Divider />
       {kids && <CommentTree ids={kids} />}
     </VStack>
   );

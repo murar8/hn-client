@@ -27,8 +27,8 @@ function Comment({ text, id, kids, ...item }: Item) {
   const [showChildren, setShowChildren] = useState(false);
 
   return (
-    <VStack spacing={4} alignItems="stretch" _notFirst={{ pt: 8 }} ps={4}>
-      <Flex justifyContent="space-between" alignItems="center" pe={4}>
+    <VStack spacing={2} alignItems="stretch">
+      <Flex justifyContent="space-between" alignItems="center">
         <ItemData variant="ghost" {...item} />
         {kids?.length && (
           <IconButton
@@ -46,7 +46,7 @@ function Comment({ text, id, kids, ...item }: Item) {
           />
         )}
       </Flex>
-      {text && <Text fontSize="lg" overflow="hidden" dangerouslySetInnerHTML={{ __html: text }} pe={4} />}
+      {text && <Text fontSize="lg" overflow="hidden" dangerouslySetInnerHTML={{ __html: text }} />}
       {showChildren && kids?.length && <CommentTree ids={kids!} nested />}
     </VStack>
   );
@@ -60,19 +60,16 @@ export type CommentTreeProps = {
 export function CommentTree({ ids, nested = false }: CommentTreeProps) {
   const { items, error, loading, loadMore } = useComments(ids, nested ? BATCH_SIZE : INITIAL_BATCH_SIZE, BATCH_SIZE);
   const borderColor = useColorModeValue("gray.200", "gray.500");
-  const bgColor = useColorModeValue("gray.50", "gray.700");
 
   return (
-    <Flex
-      flexDir="column"
+    <VStack
+      spacing={12}
       alignItems="stretch"
       w="100%"
-      py={nested ? undefined : 4}
-      borderRadius={nested ? undefined : "lg"}
-      borderWidth={nested ? undefined : "1px"}
+      pt={nested ? 2 : 0}
+      ps={nested ? 4 : 0}
+      borderStartWidth={nested ? "1px" : undefined}
       borderColor={borderColor}
-      bgColor={bgColor}
-      borderStartWidth="1px"
     >
       {error ? (
         <HStack spacing={4} alignItems="center">
@@ -83,12 +80,12 @@ export function CommentTree({ ids, nested = false }: CommentTreeProps) {
         <>
           {items && items.map((item) => (item.text?.length ?? 0) > 0 && <Comment key={item.id} {...item} />)}
           {(items?.length ?? 0) < ids.length && (
-            <Button isLoading={loading} mx={4} mt={items?.length ? 8 : 0} onClick={() => loadMore()}>
+            <Button isLoading={loading} onClick={() => loadMore()}>
               Show More
             </Button>
           )}
         </>
       )}
-    </Flex>
+    </VStack>
   );
 }
