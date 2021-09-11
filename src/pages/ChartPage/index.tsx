@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/layout";
+import { useErrorHandler } from "react-error-boundary";
 import { Virtuoso } from "react-virtuoso";
 import { Chart } from "src/api";
-import { ErrorBanner } from "src/components/ErrorBanner";
 import { Loader } from "src/components/Loader";
 import { ItemCard } from "./ItemCard";
 import { useChart } from "./useChart";
@@ -15,8 +15,7 @@ export type ChartPageProps = {
 
 export default function ChartPage({ chart }: ChartPageProps) {
   const { items, error, loading, loadMore } = useChart(chart, BATCH_SIZE, INITIAL_BATCH_SIZE);
-
-  if (error) return <ErrorBanner p={4} error={error} />;
+  useErrorHandler(error);
 
   return (
     <Virtuoso

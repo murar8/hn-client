@@ -1,7 +1,6 @@
 import { Divider, Heading, Text, VStack } from "@chakra-ui/react";
 import { useRouteMatch } from "react-router-dom";
 import { fetchItem } from "src/api";
-import { ErrorBanner } from "src/components/ErrorBanner";
 import { ItemData } from "src/components/ItemData";
 import { Loader } from "src/components/Loader";
 import { ShortLink } from "src/components/ShortLink";
@@ -12,8 +11,8 @@ import { PollOpts } from "./PollOpts";
 export default function PostPage() {
   let { id } = useRouteMatch<{ id: string }>("/post/:id")!.params;
   let { data, error } = useSWR(id, () => fetchItem(parseInt(id)));
+  useErrorHandler(error);
 
-  if (error) return <ErrorBanner pt={4} error={error} />;
   if (!data) return <Loader size="xl" p={4} />;
 
   const { title, url, text, parts, kids, ...item } = data;
@@ -29,4 +28,7 @@ export default function PostPage() {
       {kids && <CommentTree ids={kids} />}
     </VStack>
   );
+}
+function useErrorHandler(error: any) {
+  throw new Error("Function not implemented.");
 }
