@@ -1,19 +1,19 @@
 import { useEffect, useMemo } from "react";
 import { Chart, fetchChart, fetchItem } from "src/api";
 import useSWR from "swr";
-import useSWRInfinite from "swr/infinite";
+import useSWRInfinite, { SWRInfiniteConfiguration } from "swr/infinite";
 
 export function useChart(chart: Chart, batchSize: number, initialBatchSize: number = batchSize) {
   const { data: ids, error: chartError } = useSWR(chart, () => fetchChart(chart));
 
-  const getKey = (index: number) => [ids![index]];
+  const getKey = (index: number) => (index < ids!.length ? [ids![index]] : null);
   const fetcher = (id: number) => fetchItem(id);
-  const config = { initialSize: 0 };
+  const config: SWRInfiniteConfiguration = { initialSize: initialBatchSize, fallbackData: [] };
   const { data: items, error: itemsError, size, setSize } = useSWRInfinite(getKey, fetcher, config);
 
   useEffect(
     () => {
-      if (ids && !size) setSize(Math.min(initialBatchSize, ids.length));
+      if (ids && ids?.length < initialBatchSize && size === initialBatchSize) setSize(ids.length);
     },
     [ids] /* eslint-disable-line react-hooks/exhaustive-deps */
   );

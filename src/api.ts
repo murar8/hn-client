@@ -35,7 +35,7 @@ export async function fetchData(path: string) {
   const url = `${API_URL}/${API_VERSION}/${path}.json`;
   const response = await fetch(url);
   const json = await response.json();
-  if (json === null) throw new Error("Item does not exist.");
+  if (json === null) throw new Error(`Item at path ${url} does not exist.`);
   else return json;
 }
 

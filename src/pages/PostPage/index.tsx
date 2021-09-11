@@ -9,7 +9,7 @@ import useSWR from "swr";
 import { CommentTree } from "./CommentTree";
 import { PollOpts } from "./PollOpts";
 
-export function PostPage() {
+export default function PostPage() {
   let { id } = useRouteMatch<{ id: string }>("/post/:id")!.params;
   let { data, error } = useSWR(id, () => fetchItem(parseInt(id)));
 

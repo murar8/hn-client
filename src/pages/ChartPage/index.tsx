@@ -13,10 +13,8 @@ export type ChartPageProps = {
   chart: Chart;
 };
 
-export function ChartPage({ chart }: ChartPageProps) {
+export default function ChartPage({ chart }: ChartPageProps) {
   const { items, error, loading, loadMore } = useChart(chart, BATCH_SIZE, INITIAL_BATCH_SIZE);
-
-  // const Footer = useCallback(() => (loading ? <Loader size="xl" p={4} pb={8} /> : <Box pb={4} />), [loading]);
 
   if (error) return <ErrorBanner p={4} error={error} />;
 
@@ -33,28 +31,4 @@ export function ChartPage({ chart }: ChartPageProps) {
       }}
     />
   );
-}
-
-export function BestChartPage() {
-  return <ChartPage chart="best" />;
-}
-
-export function NewChartPage() {
-  return <ChartPage chart="new" />;
-}
-
-export function TopChartPage() {
-  return <ChartPage chart="top" />;
-}
-
-export function AskChartPage() {
-  return <ChartPage chart="ask" />;
-}
-
-export function ShowChartPage() {
-  return <ChartPage chart="show" />;
-}
-
-export function JobChartPage() {
-  return <ChartPage chart="job" />;
 }

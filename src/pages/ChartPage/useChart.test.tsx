@@ -64,6 +64,14 @@ it("does not load more items when the bottom of the list is reached", async () =
   await waitFor(() => expect(screen.getAllByText(/Post #\d+/)).toHaveLength(100));
 });
 
+it("stops loading if the amount of ids is less than the initial batch size", async () => {
+  (fetchChart as jest.Mock).mockImplementation(() => {
+    return Promise.resolve(Array.from(new Array(10), (_, i) => i * 1000));
+  });
+
+  await setup();
+});
+
 [fetchChart, fetchItem].forEach((fetchFn) => {
   it(`provides the ${fetchFn.name} error to the user`, async () => {
     (fetchFn as jest.Mock).mockImplementationOnce(() => Promise.reject("Internal error"));
