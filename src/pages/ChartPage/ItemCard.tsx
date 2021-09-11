@@ -26,6 +26,7 @@ export function ItemCard({ item: { title, url, id, ...item }, _hover, ...props }
       bgColor={bgColor}
       _hover={{ bgColor: hoverColor, ..._hover }}
       onClick={() => history.push(`/post/${id}`)}
+      p={4}
       {...props}
     >
       {title && <Heading size="md">{title}</Heading>}

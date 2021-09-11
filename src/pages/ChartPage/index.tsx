@@ -1,5 +1,4 @@
 import { Box } from "@chakra-ui/layout";
-import { useCallback } from "react";
 import { Virtuoso } from "react-virtuoso";
 import { Chart } from "src/api";
 import { ErrorBanner } from "src/components/ErrorBanner";
@@ -17,7 +16,7 @@ export type ChartPageProps = {
 export function ChartPage({ chart }: ChartPageProps) {
   const { items, error, loading, loadMore } = useChart(chart, BATCH_SIZE, INITIAL_BATCH_SIZE);
 
-  const Footer = useCallback(() => (loading ? <Loader size="xl" p={4} pb={8} /> : <Box pb={4} />), [loading]);
+  // const Footer = useCallback(() => (loading ? <Loader size="xl" p={4} pb={8} /> : <Box pb={4} />), [loading]);
 
   if (error) return <ErrorBanner p={4} error={error} />;
 
@@ -27,8 +26,11 @@ export function ChartPage({ chart }: ChartPageProps) {
       data={items}
       endReached={loadMore}
       overscan={600}
-      components={{ Footer }}
-      itemContent={(_, data) => <ItemCard m={4} p={4} item={data} />}
+      itemContent={(_, data) => <ItemCard item={data} />}
+      components={{
+        Footer: () => <Box>{loading && <Loader size="xl" p={4} />}</Box>,
+        Item: (props) => <Box px={2} pt={2} _last={{ pb: 2 }} {...props} />,
+      }}
     />
   );
 }
