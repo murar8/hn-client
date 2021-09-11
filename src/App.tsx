@@ -18,7 +18,7 @@ export function App() {
     <ChakraProvider theme={theme}>
       <CSSReset />
       <BrowserRouter>
-        <Flex flexDir="column" minHeight="100%">
+        <Flex flexDir="column" height="100%">
           <Header
             routes={[
               { name: "Best", path: "/best" },
