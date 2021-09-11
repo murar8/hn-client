@@ -8,7 +8,7 @@ beforeAll(() => {
 
 it("renders a footer", async () => {
   render(<Footer />);
-  expect(screen.getByText("Contact info")).toBeVisible();
+  expect(screen.getByText("Contact")).toBeVisible();
   expect(screen.getByText("Support")).toBeVisible();
-  expect(screen.getByText(/Copyright © 2005/)).toBeVisible();
+  expect(screen.getByText(/© 2005/)).toBeVisible();
 });

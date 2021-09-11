@@ -1,3 +1,11 @@
+import { Heading, VStack } from "@chakra-ui/react";
+
 export default function HomePage() {
-  return <h1>Home</h1>;
+  return (
+    <VStack>
+      <Heading as="h1" size="4xl">
+        HN Client
+      </Heading>
+    </VStack>
+  );
 }

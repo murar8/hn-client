@@ -1,7 +1,7 @@
 import { Tag as ChakraTag, TagLabel, TagLeftIcon, TagProps as ChakraTagProps } from "@chakra-ui/react";
 import { ComponentType } from "react";
 
-type IconTagProps = Omit<ChakraTagProps, "children"> & {
+export type IconTagProps = Omit<ChakraTagProps, "children"> & {
   Icon?: ComponentType;
   label?: string;
 };
