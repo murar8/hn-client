@@ -9,7 +9,7 @@ type InfoLinkProps = Pick<IconTagProps, "Icon" | "label"> & Pick<LinkProps, "hre
 function InfoLink({ Icon, label, href }: InfoLinkProps) {
   return (
     <IconTag
-      as={(props) => <Link href={href} target="_blank" {...props} />}
+      as={(props) => <Link href={href} target="_blank" rel="noopener" {...props} />}
       variant="ghost"
       size="md"
       Icon={Icon}
