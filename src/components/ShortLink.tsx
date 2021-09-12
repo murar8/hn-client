@@ -1,4 +1,4 @@
-import { ChakraProps, Icon, Link } from "@chakra-ui/react";
+import { ChakraProps, Icon, Link, useColorModeValue } from "@chakra-ui/react";
 import { FaLink } from "react-icons/fa";
 import { baseURL } from "src/util";
 
@@ -7,9 +7,10 @@ export type ShortLinkProps = ChakraProps & {
 };
 
 export function ShortLink({ href, ...props }: ShortLinkProps) {
+  const color = useColorModeValue("gray.700", "gray.300");
   return (
     <Link
-      color="grey"
+      color={color}
       fontSize="lg"
       href={href}
       isExternal
