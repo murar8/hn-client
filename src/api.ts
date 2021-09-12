@@ -1,5 +1,12 @@
+import { initializeApp } from "firebase/app";
+import { child, get, getDatabase, ref } from "firebase/database";
+
 const API_URL = "https://hacker-news.firebaseio.com";
 const API_VERSION = "v0";
+
+initializeApp({ databaseURL: API_URL });
+
+const database = ref(getDatabase(), API_VERSION);
 
 export type Chart = "new" | "best" | "top" | "ask" | "show" | "job";
 
@@ -32,11 +39,10 @@ export type User = {
 };
 
 export async function fetchData(path: string) {
-  const url = `${API_URL}/${API_VERSION}/${path}.json`;
-  const response = await fetch(url);
-  const json = await response.json();
-  if (json === null) throw new Error(`Item at path ${url} does not exist.`);
-  else return json;
+  const ref = child(database, path);
+  const snap = await get(ref);
+  if (!snap.exists) throw new Error(`Item at path ${path} does not exist.`);
+  else return snap.val();
 }
 
 export async function fetchChart(chart: Chart) {
