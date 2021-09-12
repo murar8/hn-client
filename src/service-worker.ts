@@ -10,7 +10,7 @@
 
 import { clientsClaim } from "workbox-core";
 import { ExpirationPlugin } from "workbox-expiration";
-import { precacheAndRoute, createHandlerBoundToURL } from "workbox-precaching";
+import { createHandlerBoundToURL, precacheAndRoute } from "workbox-precaching";
 import { registerRoute } from "workbox-routing";
 import { StaleWhileRevalidate } from "workbox-strategies";
 
@@ -78,3 +78,8 @@ self.addEventListener("message", (event) => {
 });
 
 // Any other custom service worker logic can go here.
+
+registerRoute(
+  ({ url }) => url.origin === self.location.origin && url.pathname === "/favicon.ico",
+  new StaleWhileRevalidate({ cacheName: "favicon" })
+);
