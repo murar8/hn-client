@@ -43,7 +43,7 @@ export type CommentTreeProps = {
 };
 
 export function CommentTree({ ids, nested = false }: CommentTreeProps) {
-  const { items, error, isLoading, fetchMore } = usePaginatedItems(
+  const { items, isError, isLoading, fetchMore, hasMore } = usePaginatedItems(
     ids,
     nested ? BATCH_SIZE : INITIAL_BATCH_SIZE,
     BATCH_SIZE
@@ -61,7 +61,7 @@ export function CommentTree({ ids, nested = false }: CommentTreeProps) {
       borderStartWidth={nested ? "1px" : undefined}
       borderColor={borderColor}
     >
-      {error ? (
+      {isError ? (
         <HStack spacing={4} alignItems="center">
           <Icon as={FaExclamationTriangle} ps={4} boxSize={12} />
           <Text fontSize="lg">An error occured</Text>
@@ -69,7 +69,7 @@ export function CommentTree({ ids, nested = false }: CommentTreeProps) {
       ) : (
         <>
           {items && items.map((item) => (item.text?.length ?? 0) > 0 && <Comment key={item.id} {...item} />)}
-          {(items?.length ?? 0) < ids.length && (
+          {hasMore && (
             <Button isLoading={isLoading} onClick={() => fetchMore()}>
               Show More
             </Button>

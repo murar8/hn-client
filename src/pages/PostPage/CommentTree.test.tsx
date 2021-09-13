@@ -1,10 +1,20 @@
 import "@testing-library/jest-dom/extend-expect";
 import { fireEvent, getAllByLabelText, screen, waitFor } from "@testing-library/react";
-import { fetchItem } from "src/api";
+import { fetchItems } from "src/api";
 import { Renderer } from "src/testUtils";
 import { CommentTree } from "./CommentTree";
 
-jest.mock("src/api");
+jest.mock("src/api", () => ({
+  fetchItems: jest.fn((ids: number[]) =>
+    Promise.resolve(
+      ids.map((id) => ({
+        id,
+        text: `Comment #${id}`,
+        kids: Array.from(new Array(Math.floor(1000 / id)), (_, i) => parseInt(id.toString() + i.toString())),
+      }))
+    )
+  ),
+}));
 
 const ids = Array.from(new Array(100), (_, i) => i + 10);
 
@@ -13,20 +23,10 @@ async function waitForContent() {
 }
 
 async function setup() {
-  const renderer = Renderer.create().withSWRConfig();
+  const renderer = Renderer.create().withQueryClient();
   renderer.render(<CommentTree ids={ids} />);
   await waitForContent();
 }
-
-beforeEach(() => {
-  (fetchItem as jest.Mock).mockImplementation((id: number) =>
-    Promise.resolve({
-      id,
-      text: `Comment #${id}`,
-      kids: Array.from(new Array(Math.floor(1000 / id)), (_, i) => parseInt(id.toString() + i.toString())),
-    })
-  );
-});
 
 it("displays a comment tree", async () => {
   await setup();
@@ -34,7 +34,8 @@ it("displays a comment tree", async () => {
 });
 
 it("informs the user if an error occurs", async () => {
-  (fetchItem as jest.Mock).mockImplementation(() => Promise.reject("API error"));
+  jest.spyOn(console, "error").mockImplementationOnce(() => {});
+  (fetchItems as jest.Mock).mockImplementationOnce(() => Promise.reject("API error"));
   await setup();
   expect(screen.getByText(/error/)).toBeVisible();
 });

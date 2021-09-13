@@ -12,7 +12,14 @@ export function ErrorBanner({ error, onRetry, ...props }: ErrorBannerProps) {
   const buttonBorderColor = useColorModeValue("gray.800", "gray.200");
 
   return (
-    <Stack direction="column" spacing={8} alignItems="center" justifyContent="center" p={4} {...props}>
+    <Stack
+      direction={{ base: "column", sm: "row" }}
+      spacing={8}
+      alignItems="center"
+      justifyContent="center"
+      p={4}
+      {...props}
+    >
       <HStack spacing={4} justifyContent="flex-start" alignItems="center">
         <Icon as={FaExclamationTriangle} boxSize={10} />
         <Text fontSize="md" overflowWrap="anywhere">

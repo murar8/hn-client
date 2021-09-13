@@ -9,21 +9,21 @@ jest.mock("src/api");
 const ids = [1000, 1100, 1200];
 
 async function setup() {
-  const renderer = Renderer.create().withSWRConfig();
+  const renderer = Renderer.create().withQueryClient();
   renderer.render(<PollOpts ids={ids} />);
   await waitFor(() => expect(screen.queryByText("Loading...")).toBeNull());
 }
 
 it("displays the supplied poll options", async () => {
   (fetchItems as jest.Mock).mockImplementation((ids: number[]) => {
-    return Promise.resolve(ids.map((id) => ({ id, text: `Post #${id}`, score: id / 100 })));
+    return Promise.resolve(ids.map((id) => ({ id, text: `Poll option #${id}`, score: id / 100 })));
   });
 
   await setup();
 
   ids.forEach((id) => {
     expect(screen.getByText(id / 100)).toBeVisible();
-    expect(screen.getByText(`Post #${id}`)).toBeVisible();
+    expect(screen.getByText(`Poll option #${id}`)).toBeVisible();
   });
 });
 
@@ -35,6 +35,6 @@ it("filters empty items", async () => {
   await setup();
 
   ids.forEach((id) => {
-    expect(screen.queryByText(`Post #${id}`)).toBeNull();
+    expect(screen.queryByText(`Poll option #${id}`)).toBeNull();
   });
 });

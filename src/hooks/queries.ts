@@ -14,12 +14,6 @@ export function useItems(ids: number[]) {
   return useQuery(["items", ids], () => fetchItems(ids));
 }
 
-export type UsePaginatedItemsOptions = {
-  pageSize: number;
-  initialPageSize?: number;
-  enabled?: boolean;
-};
-
 export function usePaginatedItems(ids: number[] | undefined, pageSize: number, initialPageSize = pageSize) {
   const enabled = Boolean(ids);
 
@@ -29,7 +23,7 @@ export function usePaginatedItems(ids: number[] | undefined, pageSize: number, i
   };
 
   const { data, fetchNextPage, isLoading, isFetchingNextPage, isError, error, hasNextPage, refetch } = useInfiniteQuery(
-    ["paginated_items", ids],
+    ["paginated", ids],
     ({ pageParam = [0, initialPageSize] }) => fetchItems(ids!.slice(...pageParam)),
     { getNextPageParam, enabled }
   );
