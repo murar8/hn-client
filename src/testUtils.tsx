@@ -3,8 +3,8 @@ import { render, RenderOptions, RenderResult } from "@testing-library/react";
 import { match as matchMediaQuery } from "css-mediaquery";
 import { createMemoryHistory, MemoryHistoryBuildOptions } from "history";
 import { ComponentType, ReactElement } from "react";
+import { QueryClient, QueryClientProvider, QueryObserverOptions } from "react-query";
 import { Router } from "react-router-dom";
-import { SWRConfig } from "swr";
 
 export type Payload = { [key: string]: unknown };
 export type Wrapper<P extends Payload> = { Component: ComponentType; payload?: P };
@@ -43,8 +43,22 @@ export class Renderer<R extends RenderResult> {
     return this.wrap({ Component: (props) => <ColorModeProvider options={options} {...props} /> });
   }
 
-  withSWRConfig(value: Parameters<typeof SWRConfig>[0]["value"] = { provider: () => new Map() }) {
-    return this.wrap({ Component: (props) => <SWRConfig value={value} {...props} /> });
+  withQueryClient(options: QueryObserverOptions = {}) {
+    const defaultOptions = {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      retry: false,
+    };
+
+    return this.wrap({
+      Component: (props) => (
+        <QueryClientProvider
+          client={new QueryClient({ defaultOptions: { queries: { ...defaultOptions, ...options } } })}
+          {...props}
+        />
+      ),
+    });
   }
 }
 

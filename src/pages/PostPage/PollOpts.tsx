@@ -1,17 +1,16 @@
 import { Grid, Icon, Text, useColorModeValue } from "@chakra-ui/react";
 import { Fragment, useMemo } from "react";
 import { FaExclamationTriangle } from "react-icons/fa";
-import { fetchItems } from "src/api";
 import { Loader } from "src/components/Loader";
+import { useItems } from "src/hooks/queries";
 import { numberToUnitString } from "src/util";
-import useSWR from "swr";
 
 type PollOptsProps = {
   ids: number[];
 };
 
 export function PollOpts({ ids }: PollOptsProps) {
-  const { data, error } = useSWR(ids, () => fetchItems(ids));
+  const { data, isLoading, isError } = useItems(ids);
   const saturation = useColorModeValue("50%", "40%");
 
   const filtered = useMemo(
@@ -23,8 +22,8 @@ export function PollOpts({ ids }: PollOptsProps) {
     [data]
   );
 
-  if (error) return <Icon as={FaExclamationTriangle} boxSize={8} />;
-  if (!data) return <Loader size="lg" />;
+  if (isError) return <Icon as={FaExclamationTriangle} boxSize={8} />;
+  if (isLoading) return <Loader size="lg" />;
 
   return (
     <Grid gap={2} templateColumns="auto auto" alignItems="baseline">

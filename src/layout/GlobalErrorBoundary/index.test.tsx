@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
-import { ErrorBannerBoundary } from ".";
+import { GlobalErrorBoundary } from ".";
 
 const consoleError = jest.spyOn(console, "error").mockImplementation();
 
@@ -15,9 +15,9 @@ afterAll(() => {
 
 it("renders an error boundary", async () => {
   render(
-    <ErrorBannerBoundary>
+    <GlobalErrorBoundary>
       <Child />
-    </ErrorBannerBoundary>
+    </GlobalErrorBoundary>
   );
   expect(screen.getByText(/Failed to fetch data./)).toBeVisible();
 });

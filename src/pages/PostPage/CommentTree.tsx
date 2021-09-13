@@ -1,27 +1,12 @@
 import { Button, Flex, HStack, Icon, IconButton, Text, useColorModeValue, VStack } from "@chakra-ui/react";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { FaAngleDown, FaExclamationTriangle } from "react-icons/fa";
-import { fetchItem, Item } from "src/api";
+import { Item } from "src/api";
 import { ItemData } from "src/components/ItemData";
-import useSWRInfinite from "swr/infinite";
+import { usePaginatedItems } from "src/hooks/queries";
 
 const INITIAL_BATCH_SIZE = 10;
 const BATCH_SIZE = 5;
-
-function useComments(ids: number[], batchSize: number, initialBatchSize: number = batchSize) {
-  const getKey = (index: number) => [ids[index]];
-  const fetcher = async (id: number) => fetchItem(id);
-  const config = { initialSize: Math.min(ids.length, initialBatchSize) };
-  const { data: items, error, size, setSize } = useSWRInfinite(getKey, fetcher, config);
-
-  const loading = useMemo(() => !error && (!items || items[size - 1] === undefined), [error, items, size]);
-
-  const loadMore = () => {
-    if (size < ids.length) setSize(Math.min(size + batchSize, ids.length));
-  };
-
-  return { items, error, loading, loadMore };
-}
 
 function Comment({ text, id, kids, ...item }: Item) {
   const [showChildren, setShowChildren] = useState(false);
@@ -58,7 +43,12 @@ export type CommentTreeProps = {
 };
 
 export function CommentTree({ ids, nested = false }: CommentTreeProps) {
-  const { items, error, loading, loadMore } = useComments(ids, nested ? BATCH_SIZE : INITIAL_BATCH_SIZE, BATCH_SIZE);
+  const { items, error, isLoading, fetchMore } = usePaginatedItems(
+    ids,
+    nested ? BATCH_SIZE : INITIAL_BATCH_SIZE,
+    BATCH_SIZE
+  );
+
   const borderColor = useColorModeValue("gray.200", "gray.500");
 
   return (
@@ -80,7 +70,7 @@ export function CommentTree({ ids, nested = false }: CommentTreeProps) {
         <>
           {items && items.map((item) => (item.text?.length ?? 0) > 0 && <Comment key={item.id} {...item} />)}
           {(items?.length ?? 0) < ids.length && (
-            <Button isLoading={loading} onClick={() => loadMore()}>
+            <Button isLoading={isLoading} onClick={() => fetchMore()}>
               Show More
             </Button>
           )}
