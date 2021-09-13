@@ -2,7 +2,8 @@ name: ci
 
 env: { CI: true }
 
-on: { push: { branches: [master] } }
+on:
+  push: { branches: [master] }
 
 jobs:
   build:
@@ -25,3 +26,11 @@ jobs:
 
       - name: Build
         run: yarn build
+
+      - name: Deploy to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: "murar8-hn-client"
+          heroku_email: "lnzmrr@gmail.com"
+          appdir: "build"
