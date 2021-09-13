@@ -3,7 +3,8 @@ name: ci
 env: { CI: true }
 
 on:
-  push: { branches: [master] }
+  push:
+    branches: [main]
 
 jobs:
   build:
