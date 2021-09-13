@@ -1,7 +1,10 @@
 {
   "name": "Hacker News",
   "display": "standalone",
-  "start_url": ".",
+  "start_url": "/best",
+  "theme_color": "#1A202C",
+  "background_color": "#1A202C",
+
   "icons": [
     {
       "src": "android-chrome-192x192.png",
