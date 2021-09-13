@@ -32,6 +32,8 @@ jobs:
         uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: "murar8-hn-client"
+          heroku_app_name: "hn-pro"
           heroku_email: "lnzmrr@gmail.com"
-          appdir: "build"
+          buildpack: "https://github.com/mars/create-react-app-buildpack.git"
+          # branch: "master"
+          # appdir: "build"
