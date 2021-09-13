@@ -1,4 +1,4 @@
-import { Button, Flex, HStack, Icon, IconButton, Text, useColorModeValue, VStack } from "@chakra-ui/react";
+import { Button, Flex, Icon, IconButton, Text, useColorModeValue, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { FaAngleDown, FaExclamationTriangle } from "react-icons/fa";
 import { Item } from "src/api";
@@ -43,7 +43,7 @@ export type CommentTreeProps = {
 };
 
 export function CommentTree({ ids, nested = false }: CommentTreeProps) {
-  const { items, isError, isLoading, fetchMore, hasMore } = usePaginatedItems(
+  const { items, isError, isLoading, fetchMore, hasMore, refetch } = usePaginatedItems(
     ids,
     nested ? BATCH_SIZE : INITIAL_BATCH_SIZE,
     BATCH_SIZE
@@ -62,14 +62,13 @@ export function CommentTree({ ids, nested = false }: CommentTreeProps) {
       borderColor={borderColor}
     >
       {isError ? (
-        <HStack spacing={4} alignItems="center">
-          <Icon as={FaExclamationTriangle} ps={4} boxSize={12} />
-          <Text fontSize="lg">An error occured</Text>
-        </HStack>
+        <Button leftIcon={<Icon as={FaExclamationTriangle} />} onClick={() => refetch()}>
+          Retry
+        </Button>
       ) : (
         <>
           {items && items.map((item) => (item.text?.length ?? 0) > 0 && <Comment key={item.id} {...item} />)}
-          {hasMore && (
+          {(hasMore || isLoading) && (
             <Button isLoading={isLoading} onClick={() => fetchMore()}>
               Show More
             </Button>

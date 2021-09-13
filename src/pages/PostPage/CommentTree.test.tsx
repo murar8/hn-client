@@ -33,11 +33,15 @@ it("displays a comment tree", async () => {
   expect(screen.getAllByText(/Comment #\d+/)).toHaveLength(5);
 });
 
-it("informs the user if an error occurs", async () => {
+it("displays a retry button when an error occurs", async () => {
   jest.spyOn(console, "error").mockImplementationOnce(() => {});
   (fetchItems as jest.Mock).mockImplementationOnce(() => Promise.reject("API error"));
   await setup();
-  expect(screen.getByText(/error/)).toBeVisible();
+
+  fireEvent.click(screen.getByText("Retry"));
+  await waitForContent();
+
+  expect(screen.getAllByText(/Comment #\d+/)).toHaveLength(5);
 });
 
 it("loads more items on demand", async () => {

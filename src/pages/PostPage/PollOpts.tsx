@@ -1,4 +1,4 @@
-import { Grid, Icon, Text, useColorModeValue } from "@chakra-ui/react";
+import { Button, Grid, Icon, Text, useColorModeValue } from "@chakra-ui/react";
 import { Fragment, useMemo } from "react";
 import { FaExclamationTriangle } from "react-icons/fa";
 import { Loader } from "src/components/Loader";
@@ -10,7 +10,7 @@ type PollOptsProps = {
 };
 
 export function PollOpts({ ids }: PollOptsProps) {
-  const { data, isLoading, isError } = useItems(ids);
+  const { data, isLoading, isError, refetch } = useItems(ids);
   const saturation = useColorModeValue("50%", "40%");
 
   const filtered = useMemo(
@@ -22,7 +22,14 @@ export function PollOpts({ ids }: PollOptsProps) {
     [data]
   );
 
-  if (isError) return <Icon as={FaExclamationTriangle} boxSize={8} />;
+  if (isError) {
+    return (
+      <Button leftIcon={<Icon as={FaExclamationTriangle} />} onClick={() => refetch()}>
+        Retry
+      </Button>
+    );
+  }
+
   if (isLoading) return <Loader size="lg" />;
 
   return (
