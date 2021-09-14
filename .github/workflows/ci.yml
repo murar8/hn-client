@@ -4,7 +4,9 @@ env: { CI: true }
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - production
 
 jobs:
   build:
@@ -28,12 +30,17 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Deploy to Heroku
-        uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+      - name: Get channel ID
+        id: get-channel-id
+        run: |
+          GITHUB_BRANCH=${GITHUB_REF#refs/heads/}
+          CHANNEL=$([ "$GITHUB_BRANCH" == main ] && echo "staging" || echo "live")
+          echo "::set-output name=id::$CHANNEL"
+
+      - name: Deploy
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: "hn-pro"
-          heroku_email: "lnzmrr@gmail.com"
-          buildpack: "https://github.com/mars/create-react-app-buildpack.git"
-          # branch: "master"
-          # appdir: "build"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_MURAR8_HN_CLIENT }}"
+          channelId: "${{ steps.get-channel-id.outputs.id }}"
+          # repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          # projectId: murar8-hn-client
