@@ -4,9 +4,9 @@ env: { CI: true }
 
 on:
   push:
-    branches:
-      - main
-      - production
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   build:
@@ -30,17 +30,16 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Get channel ID
-        id: get-channel-id
-        run: |
-          GITHUB_BRANCH=${GITHUB_REF#refs/heads/}
-          CHANNEL=$([ "$GITHUB_BRANCH" == main ] && echo "staging" || echo "live")
-          echo "::set-output name=id::$CHANNEL"
-
-      - name: Deploy
+      - name: Deploy preview
+        if: github.base_ref == 'refs/heads/main'
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_MURAR8_HN_CLIENT }}"
-          channelId: "${{ steps.get-channel-id.outputs.id }}"
-          # repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          # projectId: murar8-hn-client
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Deploy to production
+        if: github.ref == 'refs/heads/main'
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_MURAR8_HN_CLIENT }}"
+          channelId: live
