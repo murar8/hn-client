@@ -34,7 +34,7 @@ jobs:
         run: yarn build
 
       - name: Deploy to a preview channel
-        if: github.event.pull_request.base.ref == 'refs/heads/main'
+        if: github.base_ref == 'main'
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_MURAR8_HN_CLIENT }}"
