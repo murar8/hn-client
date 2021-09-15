@@ -6,9 +6,9 @@ import { BrowserRouter, Switch } from "react-router-dom";
 import { Loader } from "src/components/Loader";
 import { NamedRoute } from "src/components/NamedRoute";
 import { theme } from "src/config/theme";
-import { Footer } from "src/layout/Footer";
-import { Header } from "src/layout/Header";
-import { GlobalErrorBoundary } from "./layout/GlobalErrorBoundary";
+import { Footer } from "src/common/Footer";
+import { Header } from "src/common/Header";
+import { GlobalErrorBoundary } from "./common/GlobalErrorBoundary";
 
 const ChartPage = lazy(() => import("src/pages/ChartPage"));
 const PostPage = lazy(() => import("src/pages/PostPage"));
