@@ -1,6 +1,8 @@
 import { Box } from "@chakra-ui/layout";
+import { useState } from "react";
 import { Virtuoso } from "react-virtuoso";
 import { Chart } from "src/api";
+import { SharedState, useSharedState } from "src/common/SharedStateProvider";
 import { ErrorBanner } from "src/components/ErrorBanner";
 import { Loader } from "src/components/Loader";
 import { useChart, usePaginatedItems } from "src/hooks/queries";
@@ -14,6 +16,9 @@ export type ChartPageProps = {
 };
 
 export default function ChartPage({ chart }: ChartPageProps) {
+  const [index, setIndex] = useSharedState(`${ChartPage.name}-${chart}`) as SharedState<number>;
+  const [initialTopMostItemIndex] = useState(index ?? 0);
+
   const {
     data: ids,
     error: idsError,
@@ -37,6 +42,8 @@ export default function ChartPage({ chart }: ChartPageProps) {
   return (
     <Virtuoso
       useWindowScroll
+      initialTopMostItemIndex={initialTopMostItemIndex}
+      rangeChanged={({ startIndex }) => setIndex(startIndex)}
       data={items}
       endReached={() => fetchMore()}
       overscan={600}
