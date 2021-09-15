@@ -19,6 +19,7 @@ export const theme = extendTheme({
           container: {
             textColor: mode(`${props.colorScheme}.500`, transparentize(`${props.colorScheme}.200`, 0.8))(props),
             paddingInline: 0,
+            minWidth: 0,
           },
         }),
       },

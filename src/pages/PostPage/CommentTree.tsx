@@ -8,13 +8,13 @@ import { usePaginatedItems } from "src/hooks/queries";
 const INITIAL_BATCH_SIZE = 10;
 const BATCH_SIZE = 5;
 
-function Comment({ text, id, kids, ...item }: Item) {
+function Comment({ text, id, kids, by, time, score, descendants, dead }: Item) {
   const [showChildren, setShowChildren] = useState(false);
 
   return (
     <VStack spacing={2} alignItems="stretch">
       <Flex justifyContent="space-between" alignItems="center">
-        <ItemData variant="ghost" {...item} />
+        <ItemData variant="ghost" by={by} time={time} score={score} descendants={descendants} dead={dead} />
         {kids?.length && (
           <IconButton
             variant="ghost"

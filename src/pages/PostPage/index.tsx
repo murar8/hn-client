@@ -15,7 +15,7 @@ export default function PostPage() {
   if (isError) return <ErrorBanner error={error} onRetry={() => refetch()} />;
   if (isLoading) return <Loader size="lg" />;
 
-  const { title, url, text, parts, kids, ...item } = data!;
+  const { title, url, text, parts, kids, by, time, score, descendants, dead } = data!;
 
   return (
     <VStack spacing={8} my={4} p={4} alignItems="flex-start">
@@ -23,7 +23,7 @@ export default function PostPage() {
       {url && <ShortLink href={url} />}
       {text && <Text fontSize="lg" dangerouslySetInnerHTML={{ __html: text }} />}
       {parts && <PollOpts ids={parts} />}
-      <ItemData variant="outline" {...item} />
+      <ItemData variant="outline" by={by} time={time} score={score} descendants={descendants} dead={dead} />
       <Divider />
       {kids && <CommentTree ids={kids} />}
     </VStack>

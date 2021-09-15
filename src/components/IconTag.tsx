@@ -9,7 +9,7 @@ export type IconTagProps = Omit<ChakraTagProps, "children"> & {
 export function IconTag({ Icon, label, variant, ...props }: IconTagProps) {
   return (
     <ChakraTag size="lg" variant={variant} {...props}>
-      {Icon && <TagLeftIcon as={Icon} />}
+      {Icon && <TagLeftIcon as={Icon} mr={label ? undefined : 0} />}
       {label && <TagLabel overflow="visible">{label}</TagLabel>}
     </ChakraTag>
   );
