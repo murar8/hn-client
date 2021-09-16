@@ -2,10 +2,13 @@
 
 This project is an alternative client to browse the [Hacker News](https://news.ycombinator.com) website by means of its [public API](https://github.com/HackerNews/API).
 
+The live version of the website is available at [murar8-hn-client.web.app](https://murar8-hn-client.web.app)
+
 ## Features
 
 - Responsive design.
 - Pagination and code splitting for increasing performance.
+- PWA support using Workbox for caching static content.
 - Dynamic theme based on system preferences.
 
 ## Inner workings
@@ -20,6 +23,10 @@ This project is an alternative client to browse the [Hacker News](https://news.y
 | Testing (integration/unit)    | Jest + React Testing Libray |
 | Component library             | Chakra UI                   |
 | Routing                       | React Router                |
+
+### Deployment
+
+Deployment is handled using a github actions CI pipeline that deploys the website whenever new code is pushed to the `main` branch. In addition, whenever a PR is opened, the pipeline generates a staging URL where the website containing the proposed modifications is deployed.
 
 ## License
 

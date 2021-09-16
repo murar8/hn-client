@@ -5,11 +5,12 @@ env: { CI: true }
 on:
   push:
     branches: [main]
-    paths-ignore: [".github/**"]
+    paths-ignore:
+      - ".github/**"
+      - "README.md"
 
   pull_request:
     branches: [main]
-    paths-ignore: [".github/**"]
 
 jobs:
   build:
