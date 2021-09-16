@@ -54,5 +54,6 @@ export async function fetchItem(id: number) {
 }
 
 export async function fetchItems(ids: number[]) {
-  return Promise.all(ids.map(fetchItem));
+  const items = await Promise.all(ids.map(fetchItem));
+  return items.filter((i) => i !== null);
 }
