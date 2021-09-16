@@ -13,7 +13,7 @@ export function SharedStateProvider(props: GlobalStateProviderProps) {
   return <SharedStateContext.Provider {...props} value={{ sharedState, setSharedState }} />;
 }
 
-export type SharedState<S = unknown> = [S, (value: S) => void];
+export type SharedState<S = unknown> = [S | undefined, (value: S) => void];
 
 export function useSharedState(key: string): SharedState {
   let { sharedState, setSharedState } = useContext(SharedStateContext);
