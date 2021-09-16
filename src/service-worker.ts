@@ -54,10 +54,13 @@ registerRoute(
   createHandlerBoundToURL(process.env.PUBLIC_URL + "/index.html")
 );
 
+const CACHED_ASSETS = ["favicon.ico", "android-chrome-192x192.png", "android-chrome-512x512.png"];
+
 registerRoute(
-  ({ url }) => url.origin === self.location.origin && (url.pathname.endsWith(".png") || url.pathname.endsWith(".ico")),
+  ({ request }) => CACHED_ASSETS.some((asset) => request.url.endsWith(asset)),
   new StaleWhileRevalidate({
-    plugins: [new ExpirationPlugin({ maxEntries: 50 }), new CacheableResponsePlugin({ statuses: [0, 200] })],
+    cacheName: "assets",
+    plugins: [new CacheableResponsePlugin({ statuses: [0, 200] }), new ExpirationPlugin({ maxEntries: 60 })],
   })
 );
 
