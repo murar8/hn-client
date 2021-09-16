@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/layout";
 import { useState } from "react";
-import { Virtuoso } from "react-virtuoso";
+import { ListRange, Virtuoso } from "react-virtuoso";
 import { Chart } from "src/api";
 import { SharedState, useSharedState } from "src/common/SharedStateProvider";
 import { ErrorBanner } from "src/components/ErrorBanner";
@@ -8,8 +8,9 @@ import { Loader } from "src/components/Loader";
 import { useChart, usePaginatedItems } from "src/hooks/queries";
 import { ItemCard } from "./ItemCard";
 
-const BATCH_SIZE = 10;
-export const INITIAL_BATCH_SIZE = 20;
+const BUFFER_SIZE = 10;
+const INITIAL_BATCH_SIZE = 20;
+const BATCH_SIZE = 5;
 
 export type ChartPageProps = {
   chart: Chart;
@@ -39,13 +40,17 @@ export default function ChartPage({ chart }: ChartPageProps) {
   if (isIdsError) return <ErrorBanner error={idsError} onRetry={() => refetchIds()} />;
   if (isItemsError) return <ErrorBanner error={itemsError} onRetry={() => refetchItems()} />;
 
+  const onRangeChanged = ({ startIndex, endIndex }: ListRange) => {
+    setIndex(startIndex);
+    if (!isLoadingItems && items.length - endIndex < BUFFER_SIZE) fetchMore();
+  };
+
   return (
     <Virtuoso
       useWindowScroll
       initialTopMostItemIndex={initialTopMostItemIndex}
-      rangeChanged={({ startIndex }) => setIndex(startIndex)}
+      rangeChanged={onRangeChanged}
       data={items}
-      endReached={() => fetchMore()}
       overscan={600}
       itemContent={(_, data) => <ItemCard item={data} />}
       components={{
