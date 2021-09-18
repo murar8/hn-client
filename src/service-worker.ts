@@ -54,7 +54,7 @@ registerRoute(
   createHandlerBoundToURL(process.env.PUBLIC_URL + "/index.html")
 );
 
-const CACHED_ASSETS = ["favicon.ico", "android-chrome-192x192.png", "android-chrome-512x512.png"];
+const CACHED_ASSETS = ["favicon.ico"];
 
 registerRoute(
   ({ request }) => CACHED_ASSETS.some((asset) => request.url.endsWith(asset)),
