@@ -4,12 +4,13 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { BrowserRouter, Switch } from "react-router-dom";
 import { Footer } from "src/common/Footer";
+import { GlobalErrorBoundary } from "src/common/GlobalErrorBoundary";
 import { Header } from "src/common/Header";
+import { SharedStateProvider } from "src/common/SharedStateProvider";
+import { ServiceWorkerManager } from "src/common/ServiceWorkerManager";
 import { Loader } from "src/components/Loader";
 import { NamedRoute } from "src/components/NamedRoute";
 import { theme } from "src/config/theme";
-import { GlobalErrorBoundary } from "./common/GlobalErrorBoundary";
-import { SharedStateProvider } from "./common/SharedStateProvider";
 
 const ChartPage = lazy(() => import("src/pages/ChartPage"));
 const PostPage = lazy(() => import("src/pages/PostPage"));
@@ -46,6 +47,7 @@ export function App() {
           <SharedStateProvider>
             <Flex flexDir="column" height="100%">
               <Header routes={headerRoutes} />
+              <ServiceWorkerManager />
               <Container maxW="container.xl" p={0} flexGrow={1}>
                 <GlobalErrorBoundary>
                   <Suspense fallback={<Loader size="xl" />}>
