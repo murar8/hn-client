@@ -30,7 +30,7 @@ export function ItemCard({ item: { title, url, id, ...item }, _hover, ...props }
       {...props}
     >
       {title && <Heading size="md">{title}</Heading>}
-      {url && <ShortLink href={url} />}
+      {url && <ShortLink href={url} onClick={(e) => e.stopPropagation()} />}
       <ItemData variant="outline" {...item} />
     </VStack>
   );
