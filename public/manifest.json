@@ -1,6 +1,6 @@
 {
   "name": "Hacker News",
-  "display": "standalone",
+  "display": "minimal-ui",
   "start_url": "/top",
   "theme_color": "#1A202C",
   "background_color": "#1A202C",
