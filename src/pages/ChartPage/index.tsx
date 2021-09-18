@@ -1,20 +1,17 @@
 import { Box } from "@chakra-ui/layout";
 import { ChakraProps } from "@chakra-ui/system";
-import { memo, useState } from "react";
-import { ItemProps, ListRange, ScrollerProps, ScrollSeekPlaceholderProps, Virtuoso } from "react-virtuoso";
+import { useState } from "react";
+import { ItemProps, ListRange, ScrollerProps, Virtuoso } from "react-virtuoso";
 import { Chart } from "src/api";
 import { SharedState, useSharedState } from "src/common/SharedStateProvider";
 import { ErrorBanner } from "src/components/ErrorBanner";
 import { Loader } from "src/components/Loader";
 import { useChart, usePaginatedItems } from "src/hooks/queries";
-import { Card, ItemCard } from "./ItemCard";
+import { ItemCard } from "./ItemCard";
 
 const BUFFER_SIZE = 10;
 const INITIAL_BATCH_SIZE = 20;
 const BATCH_SIZE = 5;
-
-const SCROLL_PLACEHOLDER_ENTER_VELOCITY = 200;
-const SCROLL_PLACEHOLDER_EXIT_VELOCITY = 20;
 
 function Scroller(props: ScrollerProps) {
   return <Box mt={2} {...props} />;
@@ -24,15 +21,11 @@ function Item(props: ChakraProps & Partial<ItemProps>) {
   return <Box px={2} pb={2} {...props} />;
 }
 
-const ScrollSeekPlaceholder = memo((props: Pick<ScrollSeekPlaceholderProps, "height">) => (
-  <Item {...props}>
-    <Card height="100%" />
-  </Item>
-));
+type FooterProps = { isLoading: boolean };
 
-export type FooterProps = { isLoading: boolean };
-
-const Footer = memo(({ isLoading, ...props }: FooterProps) => <Box>{isLoading && <Loader size="xl" />}</Box>);
+function Footer({ isLoading, ...props }: FooterProps) {
+  return <Box>{isLoading && <Loader size="xl" />}</Box>;
+}
 
 export type ChartPageProps = { chart: Chart };
 
@@ -74,13 +67,8 @@ export default function ChartPage({ chart }: ChartPageProps) {
       itemContent={(_, data) => <ItemCard item={data} />}
       components={{
         Item,
-        ScrollSeekPlaceholder,
         Scroller,
         Footer: () => <Footer isLoading={isLoadingIds || isLoadingItems} />,
-      }}
-      scrollSeekConfiguration={{
-        enter: (velocity) => Math.abs(velocity) > SCROLL_PLACEHOLDER_ENTER_VELOCITY,
-        exit: (velocity) => Math.abs(velocity) < SCROLL_PLACEHOLDER_EXIT_VELOCITY,
       }}
     />
   );
