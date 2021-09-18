@@ -51,7 +51,6 @@ export default function ChartPage({ chart }: ChartPageProps) {
       initialTopMostItemIndex={initialTopMostItemIndex}
       rangeChanged={onRangeChanged}
       data={items}
-      overscan={600}
       itemContent={(_, data) => <ItemCard item={data} />}
       components={{
         Footer: () => <Box>{(isLoadingIds || isLoadingItems) && <Loader size="xl" />}</Box>,
