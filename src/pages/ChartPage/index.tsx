@@ -1,20 +1,40 @@
 import { Box } from "@chakra-ui/layout";
-import { useState } from "react";
-import { ListRange, Virtuoso } from "react-virtuoso";
+import { ChakraProps } from "@chakra-ui/system";
+import { memo, useState } from "react";
+import { ItemProps, ListRange, ScrollerProps, ScrollSeekPlaceholderProps, Virtuoso } from "react-virtuoso";
 import { Chart } from "src/api";
 import { SharedState, useSharedState } from "src/common/SharedStateProvider";
 import { ErrorBanner } from "src/components/ErrorBanner";
 import { Loader } from "src/components/Loader";
 import { useChart, usePaginatedItems } from "src/hooks/queries";
-import { ItemCard } from "./ItemCard";
+import { Card, ItemCard } from "./ItemCard";
 
 const BUFFER_SIZE = 10;
 const INITIAL_BATCH_SIZE = 20;
 const BATCH_SIZE = 5;
 
-export type ChartPageProps = {
-  chart: Chart;
-};
+const SCROLL_PLACEHOLDER_ENTER_VELOCITY = 80;
+const SCROLL_PLACEHOLDER_EXIT_VELOCITY = 20;
+
+function Scroller(props: ScrollerProps) {
+  return <Box mt={2} {...props} />;
+}
+
+function Item(props: ChakraProps & Partial<ItemProps>) {
+  return <Box px={2} pb={2} {...props} />;
+}
+
+const ScrollSeekPlaceholder = memo((props: Pick<ScrollSeekPlaceholderProps, "height">) => (
+  <Item {...props}>
+    <Card height="100%" />
+  </Item>
+));
+
+export type FooterProps = { isLoading: boolean };
+
+const Footer = memo(({ isLoading, ...props }: FooterProps) => <Box>{isLoading && <Loader size="xl" />}</Box>);
+
+export type ChartPageProps = { chart: Chart };
 
 export default function ChartPage({ chart }: ChartPageProps) {
   const [index, setIndex] = useSharedState(`${ChartPage.name}-${chart}`) as SharedState<number>;
@@ -53,8 +73,14 @@ export default function ChartPage({ chart }: ChartPageProps) {
       data={items}
       itemContent={(_, data) => <ItemCard item={data} />}
       components={{
-        Footer: () => <Box>{(isLoadingIds || isLoadingItems) && <Loader size="xl" />}</Box>,
-        Item: (props) => <Box px={2} pt={2} _last={{ pb: 2 }} {...props} />,
+        Item,
+        ScrollSeekPlaceholder,
+        Scroller,
+        Footer: () => <Footer isLoading={isLoadingIds || isLoadingItems} />,
+      }}
+      scrollSeekConfiguration={{
+        enter: (velocity) => Math.abs(velocity) > SCROLL_PLACEHOLDER_ENTER_VELOCITY,
+        exit: (velocity) => Math.abs(velocity) < SCROLL_PLACEHOLDER_EXIT_VELOCITY,
       }}
     />
   );
