@@ -9,5 +9,5 @@ it("displays the home page", async () => {
   const { history } = render(<HomePage />);
   expect(screen.getByText("HN Client")).toBeVisible();
   fireEvent.click(screen.getByText("Get Started"));
-  expect(history.location.pathname).toEqual("/best");
+  expect(history.location.pathname).toEqual("/top");
 });

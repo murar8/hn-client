@@ -16,7 +16,7 @@ export default function HomePage() {
         Alternative client for browsing the Hacker News website.
       </Text>
       <Spacer />
-      <Button as={Link} to="/best" colorScheme="green" size="lg" rightIcon={<Icon as={FaArrowRight} />}>
+      <Button as={Link} to="/top" colorScheme="green" size="lg" rightIcon={<Icon as={FaArrowRight} />}>
         Get Started
       </Button>
     </VStack>
