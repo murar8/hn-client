@@ -81,8 +81,10 @@ describe(`${useItems.name}`, () => {
 describe(`${usePaginatedItems.name}`, () => {
   const ids = Array.from(new Array(100), (_, i) => i + 10);
 
-  function Component() {
-    const { items, error, isLoading, isError, fetchMore, hasMore } = usePaginatedItems(ids, 10, 20);
+  type ComponentProps = { initialBatchSize?: number };
+
+  function Component({ initialBatchSize = 20 }: ComponentProps) {
+    const { items, error, isLoading, isError, fetchMore, hasMore } = usePaginatedItems(ids, 10, initialBatchSize);
 
     if (isError) return <p>Error: {error}</p>;
     if (isLoading) return <p>Loading...</p>;
@@ -112,6 +114,11 @@ describe(`${usePaginatedItems.name}`, () => {
 
     expect(screen.getAllByText(/Post #\d+/)).toHaveLength(100);
     expect(screen.queryByText("More")).toBeNull();
+  });
+
+  it("provides no data when using a zero initial batch size", async () => {
+    await setup(<Component initialBatchSize={0} />);
+    expect(screen.queryAllByText(/Post #\d+/)).toHaveLength(0);
   });
 
   it("informs the user if an error occurs", async () => {

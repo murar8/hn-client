@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom/extend-expect";
-import { fireEvent, getAllByLabelText, screen, waitFor } from "@testing-library/react";
+import { fireEvent, getByText, screen, waitFor } from "@testing-library/react";
 import { fetchItems } from "src/api";
 import { Renderer } from "src/testUtils";
 import { CommentTree } from "./CommentTree";
@@ -30,7 +30,7 @@ async function setup() {
 
 it("displays a comment tree", async () => {
   await setup();
-  expect(screen.getAllByText(/Comment #\d+/)).toHaveLength(5);
+  expect(screen.getAllByText(/Comment #\d+/)).toHaveLength(10);
 });
 
 it("displays a retry button when an error occurs", async () => {
@@ -41,31 +41,32 @@ it("displays a retry button when an error occurs", async () => {
   fireEvent.click(screen.getByText("Retry"));
   await waitForContent();
 
-  expect(screen.getAllByText(/Comment #\d+/)).toHaveLength(5);
+  expect(screen.getAllByText(/Comment #\d+/)).toHaveLength(10);
 });
 
 it("loads more items on demand", async () => {
   await setup();
 
-  for (let i = 0; i < 10; i++) {
-    fireEvent.click(screen.getByText("Show More"));
+  for (let i = 0; i < 18; i++) {
+    fireEvent.click(screen.getByText("Load More"));
     await waitForContent();
   }
 
   expect(screen.getAllByText(/Comment #\d+/)).toHaveLength(100);
-  expect(screen.queryByText("Show More")).toBeNull();
+  expect(screen.queryByText("Load More")).toBeNull();
 });
 
 it("shows the comment's children on click", async () => {
   await setup();
 
-  fireEvent.click(screen.getAllByLabelText("Show children")[0]);
+  fireEvent.click(screen.getByText("100 children"));
   await waitForContent();
 
+  expect(screen.queryByText("100 children")).toBeNull();
   expect(screen.getByText("Comment #100")).toBeVisible();
   expect(screen.getByText("Comment #104")).toBeVisible();
 
-  fireEvent.click(getAllByLabelText(screen.getByText("Comment #100").closest("div")!, "Show children")[0]);
+  fireEvent.click(getByText(screen.getByText("Comment #100").closest("div")!, "10 children"));
   await waitForContent();
 
   expect(screen.getByText("Comment #1000")).toBeVisible();

@@ -1,4 +1,4 @@
-import { Button, Flex, Icon, IconButton, Text, useColorModeValue, VStack } from "@chakra-ui/react";
+import { Button, Icon, Text, useColorModeValue, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { FaAngleDown, FaExclamationTriangle } from "react-icons/fa";
 import { Item } from "src/api";
@@ -10,28 +10,29 @@ const BATCH_SIZE = 5;
 
 function Comment({ text, id, kids, by, time, score, descendants, dead }: Item) {
   const [showChildren, setShowChildren] = useState(false);
+  const childrenTextColor = useColorModeValue("gray.500", "gray.400");
 
   return (
     <VStack spacing={2} alignItems="stretch">
-      <Flex justifyContent="space-between" alignItems="center">
-        <ItemData variant="ghost" by={by} time={time} score={score} descendants={descendants} dead={dead} />
-        {kids?.length && (
-          <IconButton
-            variant="ghost"
-            aria-label="Show children"
-            icon={
-              <Icon
-                as={FaAngleDown}
-                rotate="90deg"
-                transform={showChildren ? undefined : "rotate(180deg)"}
-                transition="transform 0.2s"
-              />
-            }
-            onClick={() => setShowChildren(!showChildren)}
-          />
-        )}
-      </Flex>
+      <ItemData variant="ghost" by={by} time={time} score={score} descendants={descendants} dead={dead} />
       {text && <Text fontSize="lg" overflow="hidden" dangerouslySetInnerHTML={{ __html: text }} />}
+      {kids?.length && !showChildren && (
+        <Button
+          variant="ghost"
+          color={childrenTextColor}
+          rightIcon={
+            <Icon
+              as={FaAngleDown}
+              rotate="90deg"
+              transform={showChildren ? undefined : "rotate(180deg)"}
+              transition="transform 0.2s"
+            />
+          }
+          onClick={() => setShowChildren(!showChildren)}
+        >
+          {kids.length} children
+        </Button>
+      )}
       {showChildren && kids?.length && <CommentTree ids={kids!} nested />}
     </VStack>
   );
@@ -45,8 +46,8 @@ export type CommentTreeProps = {
 export function CommentTree({ ids, nested = false }: CommentTreeProps) {
   const { items, isError, isLoading, fetchMore, hasMore, refetch } = usePaginatedItems(
     ids,
-    nested ? BATCH_SIZE : INITIAL_BATCH_SIZE,
-    BATCH_SIZE
+    BATCH_SIZE,
+    nested ? BATCH_SIZE : INITIAL_BATCH_SIZE
   );
 
   const borderColor = useColorModeValue("gray.200", "gray.500");
@@ -70,7 +71,7 @@ export function CommentTree({ ids, nested = false }: CommentTreeProps) {
           {items && items.map((item) => (item.text?.length ?? 0) > 0 && <Comment key={item.id} {...item} />)}
           {(hasMore || isLoading) && (
             <Button isLoading={isLoading} onClick={() => fetchMore()}>
-              Show More
+              Load More
             </Button>
           )}
         </>
