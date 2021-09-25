@@ -6,6 +6,7 @@ import { Link, matchPath, useLocation } from "react-router-dom";
 function useMatchingRouteIndex(routes: { name: string; path: string }[]) {
   const { pathname } = useLocation();
   const index = useMemo(() => routes.findIndex(({ path }) => matchPath(pathname, { path })), [routes, pathname]);
+  console.log(index);
   return index !== -1 ? index : undefined;
 }
 
@@ -16,10 +17,15 @@ export type NavigationMenuProps = ChakraProps & {
 export function NavigationMenu({ routes, ...props }: NavigationMenuProps) {
   const routeIndex = useMatchingRouteIndex(routes);
 
+  const title = useMemo(
+    () => (routeIndex !== undefined ? routes[routeIndex].name : document.title || "Hacker News"),
+    [routeIndex, routes]
+  );
+
   return (
     <Menu matchWidth>
       <MenuButton as={Button} {...props} rightIcon={<Icon as={FaChevronDown} />}>
-        {routeIndex ? routes[routeIndex].name : document.title || "Hacker News"}
+        {title}
       </MenuButton>
       <MenuList>
         {routes
