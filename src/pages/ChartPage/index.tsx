@@ -61,6 +61,7 @@ export default function ChartPage({ chart }: ChartPageProps) {
   return (
     <Virtuoso
       useWindowScroll
+      increaseViewportBy={{ top: 800, bottom: 1600 }}
       initialTopMostItemIndex={initialTopMostItemIndex}
       rangeChanged={onRangeChanged}
       data={items}
