@@ -9,6 +9,7 @@ import { ServiceWorkerManager } from "src/common/ServiceWorkerManager";
 import { SharedStateProvider } from "src/common/SharedStateProvider";
 import { theme } from "src/config/theme";
 import { queryClient } from "src/queryClient";
+import { ScrollTopButton } from "./common/ScrollTopButton";
 
 const headerRoutes = [
   { name: "Best", path: "/best" },
@@ -24,7 +25,7 @@ export function App() {
     <ChakraProvider theme={theme}>
       <CSSReset />
       <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+        <ReactQueryDevtools initialIsOpen={false} position="bottom-left" />
         <BrowserRouter>
           <SharedStateProvider>
             <Flex flexDir="column" height="100%">
@@ -32,6 +33,7 @@ export function App() {
               <ServiceWorkerManager />
               <Routes />
               <Footer />
+              <ScrollTopButton />
             </Flex>
           </SharedStateProvider>
         </BrowserRouter>
