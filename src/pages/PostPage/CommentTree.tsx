@@ -30,7 +30,7 @@ function Comment({ text, id, kids, by, time, score, descendants, dead }: Item) {
           }
           onClick={() => setShowChildren(!showChildren)}
         >
-          {kids.length} children
+          {kids.length} {kids.length === 1 ? "child" : "children"}
         </Button>
       )}
       {showChildren && kids?.length && <CommentTree ids={kids!} nested />}
