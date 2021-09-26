@@ -23,7 +23,7 @@ export function ScrollTopButton() {
       else if (visible && window.scrollY / window.innerHeight < VISIBILITY_THRESHOLD_HIDE) setVisible(false);
     };
 
-    window.addEventListener("scroll", scrollHandler);
+    window.addEventListener("scroll", scrollHandler, { passive: true });
     return () => window.removeEventListener("scroll", scrollHandler);
   });
 
