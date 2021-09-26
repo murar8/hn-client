@@ -56,13 +56,12 @@ it("loads more items on demand", async () => {
   expect(screen.queryByText("Load More")).toBeNull();
 });
 
-it("shows the comment's children on click", async () => {
+it("shows the comment's children when clicking the children button", async () => {
   await setup();
 
   fireEvent.click(screen.getByText("100 children"));
   await waitForContent();
 
-  expect(screen.queryByText("100 children")).toBeNull();
   expect(screen.getByText("Comment #100")).toBeVisible();
   expect(screen.getByText("Comment #104")).toBeVisible();
 
@@ -71,4 +70,15 @@ it("shows the comment's children on click", async () => {
 
   expect(screen.getByText("Comment #1000")).toBeVisible();
   expect(screen.getByText("Comment #1004")).toBeVisible();
+});
+
+it("hides the comment's children when clicking the children button while expanded", async () => {
+  await setup();
+  const button = screen.getByText("100 children");
+
+  fireEvent.click(button);
+  await waitForContent();
+  fireEvent.click(button);
+
+  expect(screen.queryByText("Comment #100")).toBeNull();
 });

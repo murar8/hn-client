@@ -1,5 +1,7 @@
-import { Button, Icon, Text, useColorModeValue, VStack } from "@chakra-ui/react";
-import { useState } from "react";
+import { Button, Icon, Spinner, Text, useColorModeValue, VStack } from "@chakra-ui/react";
+import { motion } from "framer-motion";
+import { forwardRef, LegacyRef, useState } from "react";
+import { IconBaseProps } from "react-icons";
 import { FaAngleDown, FaExclamationTriangle } from "react-icons/fa";
 import { Item } from "src/api";
 import { ItemData } from "src/components/ItemData";
@@ -7,6 +9,15 @@ import { usePaginatedItems } from "src/hooks/queries";
 
 const INITIAL_BATCH_SIZE = 10;
 const BATCH_SIZE = 5;
+
+// See https://github.com/react-icons/react-icons/issues/336
+const AngleDownIcon = forwardRef((props: IconBaseProps, ref: LegacyRef<HTMLSpanElement>) => (
+  <span ref={ref}>
+    <FaAngleDown {...props} />
+  </span>
+));
+
+const MotionIcon = motion(Icon);
 
 function Comment({ text, id, kids, by, time, score, descendants, dead }: Item) {
   const [showChildren, setShowChildren] = useState(false);
@@ -16,21 +27,23 @@ function Comment({ text, id, kids, by, time, score, descendants, dead }: Item) {
     <VStack spacing={2} alignItems="stretch">
       <ItemData variant="ghost" by={by} time={time} score={score} descendants={descendants} dead={dead} />
       {text && <Text fontSize="lg" overflow="hidden" dangerouslySetInnerHTML={{ __html: text }} />}
-      {kids?.length && !showChildren && (
+      {kids?.length && (
         <Button
           variant="ghost"
           color={childrenTextColor}
-          rightIcon={
-            <Icon
-              as={FaAngleDown}
+          justifyContent="start"
+          paddingLeft={1}
+          leftIcon={
+            <MotionIcon
+              as={AngleDownIcon}
               rotate="90deg"
-              transform={showChildren ? undefined : "rotate(180deg)"}
-              transition="transform 0.2s"
+              animate={showChildren ? "open" : "closed"}
+              variants={{ open: { rotate: 0 }, closed: { rotate: 180 } }}
             />
           }
           onClick={() => setShowChildren(!showChildren)}
         >
-          {kids.length} {kids.length === 1 ? "child" : "children"}
+          {`${kids.length} ${kids.length === 1 ? "child" : "children"}`}
         </Button>
       )}
       {showChildren && kids?.length && <CommentTree ids={kids!} nested />}
@@ -69,11 +82,7 @@ export function CommentTree({ ids, nested = false }: CommentTreeProps) {
       ) : (
         <>
           {items && items.map((item) => (item.text?.length ?? 0) > 0 && <Comment key={item.id} {...item} />)}
-          {(hasMore || isLoading) && (
-            <Button isLoading={isLoading} onClick={() => fetchMore()}>
-              Load More
-            </Button>
-          )}
+          {hasMore ? <Button onClick={() => fetchMore()}>Load More</Button> : isLoading && <Spinner />}
         </>
       )}
     </VStack>
