@@ -11,8 +11,7 @@ it("renders a button when scrolling down", async () => {
   expect(screen.queryByLabelText("Scroll to top")).toBeNull();
 
   fireEvent.scroll(window, { target: { scrollY: 1600 } });
-
-  expect(screen.getByLabelText("Scroll to top")).toBeVisible();
+  await waitFor(() => expect(screen.getByLabelText("Scroll to top")).toBeVisible());
 });
 
 it("hides the button when scrolling up", async () => {

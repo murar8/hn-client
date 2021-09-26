@@ -7,8 +7,8 @@ const VISIBILITY_THRESHOLD_SHOW = 2;
 const VISIBILITY_THRESHOLD_HIDE = 1.5;
 
 const variants: Variants = {
-  visible: { opacity: 1, rotate: 0, bottom: 16 },
-  invisible: { rotate: -360, bottom: -56 },
+  visible: { opacity: 1, rotate: 0 },
+  invisible: { opacity: 0, rotate: -360 },
 };
 
 const MotionButton = motion(IconButton);
@@ -38,6 +38,7 @@ export function ScrollTopButton() {
           icon={<Icon as={FaAngleUp} />}
           position="fixed"
           boxShadow="dark-lg"
+          bottom={4}
           right={4}
           transition={{ type: "ease", duration: 0.25 }}
           variants={variants}
