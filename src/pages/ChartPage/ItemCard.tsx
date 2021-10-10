@@ -28,6 +28,7 @@ export function ItemCard({ item: { title, url, id, ...item }, _hover, _active, .
       p={4}
       _hover={{ bgColor: hoverColor, ..._hover }}
       _active={{ bgColor: activeColor, ..._active }}
+      sx={{ WebkitTapHighlightColor: "transparent" }}
       onClick={() => history.push(`/post/${id}`)}
       {...props}
     >
