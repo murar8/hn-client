@@ -40,6 +40,7 @@ export function ScrollTopButton() {
           boxShadow="dark-lg"
           bottom={4}
           right={4}
+          sx={{ WebkitTapHighlightColor: "transparent" }}
           transition={{ type: "ease", duration: 0.25 }}
           variants={variants}
           initial={variants.invisible}
