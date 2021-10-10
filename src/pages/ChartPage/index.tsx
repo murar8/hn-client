@@ -1,7 +1,9 @@
+import { useMergeRefs } from "@chakra-ui/hooks";
 import { Box } from "@chakra-ui/layout";
 import { ChakraProps } from "@chakra-ui/system";
-import { useState } from "react";
-import { ItemProps, ListItem, ListRange, ScrollerProps, Virtuoso } from "react-virtuoso";
+import { debounce } from "lodash";
+import { forwardRef, useEffect, useMemo, useRef } from "react";
+import { ItemProps, ListItem, ListRange, Virtuoso } from "react-virtuoso";
 import { Chart, Item } from "src/api";
 import { SharedState, useSharedState } from "src/common/SharedStateProvider";
 import { ErrorBanner } from "src/components/ErrorBanner";
@@ -11,27 +13,25 @@ import { ItemCard } from "./ItemCard";
 
 const MIN_ITEM_HEIGHT = 114;
 
-function Scroller(props: ScrollerProps) {
-  return <Box mt={2} {...props} />;
-}
-
-function VirtuosoItem(props: ChakraProps & Partial<ItemProps>) {
-  return <Box px={2} pb={2} {...props} />;
-}
-
-type FooterProps = { isLoading: boolean };
-
-function Footer({ isLoading }: FooterProps) {
-  return <Box>{isLoading && <Loader size="xl" />}</Box>;
+function ItemContainer(props: ChakraProps & Partial<ItemProps>) {
+  return <Box px={2} pt={2} _last={{ pb: 2 }} {...props} />;
 }
 
 export type ChartPageProps = { chart: Chart };
 
 export default function ChartPage({ chart }: ChartPageProps) {
-  const [lastTopMostIndex, setTopMostIndex] = useSharedState(`${ChartPage.name}-${chart}`) as SharedState<number>;
-  const [initialTopMostIndex] = useState(lastTopMostIndex ?? 0);
-  const [batchSize] = useState(window.innerHeight / MIN_ITEM_HEIGHT);
-  const [initialBatchSize] = useState((window.innerHeight * 2) / MIN_ITEM_HEIGHT + batchSize);
+  const [lastTopMostIndex, setNextTopMostIndex] = useSharedState(`${ChartPage.name}-${chart}`) as SharedState<number>;
+
+  // VirtuosoProps.initialTopMostItemIndex must be a static value
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const topMostIndex = useMemo(() => lastTopMostIndex ?? 0, []);
+
+  const batchSize = useMemo(() => Math.floor(window.innerHeight / MIN_ITEM_HEIGHT), []);
+
+  const initialBatchSize = useMemo(
+    () => Math.floor((window.innerHeight * 2) / MIN_ITEM_HEIGHT) + batchSize,
+    [batchSize]
+  );
 
   const {
     data: ids,
@@ -50,36 +50,47 @@ export default function ChartPage({ chart }: ChartPageProps) {
     refetch: refetchItems,
   } = usePaginatedItems(ids, batchSize, initialBatchSize);
 
-  if (isIdsError) return <ErrorBanner error={idsError} onRetry={() => refetchIds()} />;
-  if (isItemsError) return <ErrorBanner error={itemsError} onRetry={() => refetchItems()} />;
+  const containerRef = useRef<HTMLDivElement>(null);
+  const renderedItems = useRef([] as ListItem<Item>[]);
 
-  const overscanTop = window.innerHeight / 3;
-  const overscanBottom = window.innerHeight;
+  useEffect(() => {
+    const onScroll = () => {
+      const offsetTop = containerRef.current!.getBoundingClientRect().top + window.scrollY;
+      const thresholdOffset = Math.max(window.scrollY - offsetTop, 0);
+      const topMostItem = renderedItems.current?.find((item) => item.offset >= thresholdOffset);
+      if (topMostItem) setNextTopMostIndex(topMostItem.index);
+    };
+
+    const scrollListener = debounce(onScroll, 250);
+
+    window.addEventListener("scroll", scrollListener, { passive: true });
+    return () => window.removeEventListener("scroll", scrollListener);
+  });
+
+  const onItemsRendered = (items: ListItem<Item>[]) => {
+    renderedItems.current = items;
+  };
 
   const onRangeChanged = ({ endIndex }: ListRange) => {
     if (!isLoadingItems && items.length - endIndex < batchSize) fetchMore();
   };
 
-  const onItemsRendered = (items: ListItem<Item>[]) => {
-    if (!items.length) return;
-    const thresholdOffset = items[0].offset + overscanTop;
-    const topMostItem = items.find((item) => item.offset >= thresholdOffset);
-    if (topMostItem) setTopMostIndex(topMostItem.index);
-  };
+  if (isIdsError) return <ErrorBanner error={idsError} onRetry={() => refetchIds()} />;
+  if (isItemsError) return <ErrorBanner error={itemsError} onRetry={() => refetchItems()} />;
 
   return (
     <Virtuoso
+      data={items}
       useWindowScroll
-      increaseViewportBy={{ top: overscanTop, bottom: overscanBottom }}
-      initialTopMostItemIndex={initialTopMostIndex}
+      increaseViewportBy={{ top: window.innerHeight / 3, bottom: window.innerHeight }}
+      initialTopMostItemIndex={topMostIndex}
       rangeChanged={onRangeChanged}
       itemsRendered={onItemsRendered}
-      data={items}
-      itemContent={(_, data) => <ItemCard item={data} />}
+      itemContent={(i, data) => <ItemCard item={data} />}
       components={{
-        Item: VirtuosoItem,
-        Scroller,
-        Footer: () => <Footer isLoading={isLoadingIds || isLoadingItems} />,
+        Item: ItemContainer,
+        List: forwardRef((props, ref) => <Box ref={useMergeRefs(ref, containerRef)} {...props} />),
+        Footer: () => <Box>{(isLoadingIds || isLoadingItems) && <Loader size="xl" />}</Box>,
       }}
     />
   );
