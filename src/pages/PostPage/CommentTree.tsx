@@ -26,7 +26,9 @@ function Comment({ text, id, kids, by, time, score, descendants, dead }: Item) {
   return (
     <VStack spacing={2} alignItems="stretch">
       <ItemData variant="ghost" by={by} time={time} score={score} descendants={descendants} dead={dead} />
-      {text && <Text fontSize="lg" overflow="hidden" dangerouslySetInnerHTML={{ __html: text }} />}
+      {text && (
+        <Text fontSize="lg" sx={{ "& > *": { overflowY: "scroll" } }} dangerouslySetInnerHTML={{ __html: text }} />
+      )}
       {kids?.length && (
         <Button
           variant="ghost"
