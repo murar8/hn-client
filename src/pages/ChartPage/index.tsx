@@ -64,7 +64,11 @@ export default function ChartPage({ chart }: ChartPageProps) {
     const scrollListener = debounce(onScroll, 250);
 
     window.addEventListener("scroll", scrollListener, { passive: true });
-    return () => window.removeEventListener("scroll", scrollListener);
+
+    return () => {
+      window.removeEventListener("scroll", scrollListener);
+      scrollListener.cancel();
+    };
   });
 
   const onItemsRendered = (items: ListItem<Item>[]) => {
