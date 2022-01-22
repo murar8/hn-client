@@ -1,5 +1,6 @@
 import { ChakraProps, Heading, useColorModeValue, VStack } from "@chakra-ui/react";
-import { useHistory } from "react-router-dom";
+import { MouseEvent } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { Item } from "src/api";
 import { ItemData } from "src/components/ItemData";
 import { ShortLink } from "src/components/ShortLink";
@@ -29,7 +30,8 @@ export function ItemCard({ item: { title, url, id, ...item }, _hover, _active, .
       _hover={{ bgColor: hoverColor, ..._hover }}
       _active={{ bgColor: activeColor, ..._active }}
       sx={{ WebkitTapHighlightColor: "transparent" }}
-      onClick={() => history.push(`/post/${id}`)}
+      as={Link}
+      to={`/post/${id}`}
       {...props}
     >
       {title && <Heading size="md">{title}</Heading>}
