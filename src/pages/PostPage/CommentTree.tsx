@@ -22,12 +22,17 @@ const MotionIcon = motion(Icon);
 function Comment({ text, id, kids, by, time, score, descendants, dead }: Item) {
   const [showChildren, setShowChildren] = useState(false);
   const childrenTextColor = useColorModeValue("gray.500", "gray.400");
+  const linkTextColor = useColorModeValue("gray.600", "gray.400");
 
   return (
     <VStack spacing={2} alignItems="stretch">
       <ItemData variant="ghost" by={by} time={time} score={score} descendants={descendants} dead={dead} />
       {text && (
-        <Text fontSize="lg" sx={{ "& > *": { overflowY: "scroll" } }} dangerouslySetInnerHTML={{ __html: text }} />
+        <Text
+          fontSize="lg"
+          sx={{ "& > *": { overflowY: "scroll" }, "& a": { textColor: linkTextColor } }}
+          dangerouslySetInnerHTML={{ __html: text }}
+        />
       )}
       {kids?.length && (
         <Button
