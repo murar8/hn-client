@@ -30,7 +30,7 @@ function Comment({ text, id, kids, by, time, score, descendants, dead }: Item) {
       {text && (
         <Text
           fontSize="lg"
-          sx={{ "& > *": { overflowY: "scroll" }, "& a": { textColor: linkTextColor } }}
+          sx={{ "& > *": { overflowX: "auto" }, "& a": { textColor: linkTextColor } }}
           dangerouslySetInnerHTML={{ __html: text }}
         />
       )}
