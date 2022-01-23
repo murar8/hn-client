@@ -1,6 +1,5 @@
 import { ChakraProps, Heading, useColorModeValue, VStack } from "@chakra-ui/react";
-import { MouseEvent } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Item } from "src/api";
 import { ItemData } from "src/components/ItemData";
 import { ShortLink } from "src/components/ShortLink";
@@ -10,7 +9,6 @@ export type ItemCardProps = ChakraProps & {
 };
 
 export function ItemCard({ item: { title, url, id, ...item }, _hover, _active, ...props }: ItemCardProps) {
-  const history = useHistory();
   const borderColor = useColorModeValue("gray.200", "gray.500");
   const bgColor = useColorModeValue("gray.50", "gray.700");
   const hoverColor = useColorModeValue("gray.100", "gray.600");
