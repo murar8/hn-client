@@ -3,7 +3,7 @@ import { fireEvent, screen } from "@testing-library/react";
 import { Renderer } from "src/testUtils";
 import { ColorModeButton } from "./ColorModeButton";
 
-const render = Renderer.create().withColorModeProvider({ initialColorMode: "light" }).render;
+const { render } = Renderer.create().withColorModeProvider({ initialColorMode: "light" });
 
 function Component() {
   const colorMode = useColorModeValue("light", "dark");
