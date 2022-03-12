@@ -1,4 +1,4 @@
-import { Button, Icon, Spinner, Text, useColorModeValue, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, Icon, Spinner, Text, useColorModeValue, VStack } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { forwardRef, LegacyRef, useState } from "react";
 import { IconBaseProps } from "react-icons";
@@ -25,7 +25,7 @@ function Comment({ text, id, kids, by, time, score, descendants, dead }: Item) {
   const linkTextColor = useColorModeValue("gray.600", "gray.400");
 
   return (
-    <VStack spacing={2} alignItems="stretch" data-testid={`comment-${id}`}>
+    <VStack spacing={2} alignItems="stretch" _notFirst={{ marginTop: 8 }} data-testid={`comment-${id}`}>
       <ItemData variant="ghost" by={by} time={time} score={score} descendants={descendants} dead={dead} />
       {text && (
         <Text
@@ -53,7 +53,7 @@ function Comment({ text, id, kids, by, time, score, descendants, dead }: Item) {
           {`${kids.length} ${kids.length === 1 ? "child" : "children"}`}
         </Button>
       )}
-      {showChildren && kids?.length && <CommentTree ids={kids!} nested />}
+      {showChildren && kids?.length && <CommentTree ids={kids!} nested hideSelf={() => setShowChildren(false)} />}
     </VStack>
   );
 }
@@ -61,9 +61,10 @@ function Comment({ text, id, kids, by, time, score, descendants, dead }: Item) {
 export type CommentTreeProps = {
   ids: number[];
   nested?: boolean;
+  hideSelf?: () => void;
 };
 
-export function CommentTree({ ids, nested = false }: CommentTreeProps) {
+export function CommentTree({ ids, nested = false, hideSelf }: CommentTreeProps) {
   const { items, isError, isLoading, fetchMore, hasMore, refetch } = usePaginatedItems(
     ids,
     BATCH_SIZE,
@@ -71,17 +72,26 @@ export function CommentTree({ ids, nested = false }: CommentTreeProps) {
   );
 
   const borderColor = useColorModeValue("gray.200", "gray.500");
+  const borderColorActive = useColorModeValue("gray.400", "gray.300");
 
   return (
-    <VStack
-      spacing={12}
-      alignItems="stretch"
-      w="100%"
-      pt={nested ? 2 : 0}
-      ps={nested ? 4 : 0}
-      borderStartWidth={nested ? "1px" : undefined}
-      borderColor={borderColor}
-    >
+    <Flex position="relative" direction="column" align="stretch" ps={nested ? 4 : 0}>
+      {nested && (
+        <Box
+          as="span"
+          top={0}
+          left={-4}
+          px={4}
+          sx={{ "& > *": { borderColor } }}
+          _hover={{ "& > *": { borderColor: borderColorActive } }}
+          height="100%"
+          position="absolute"
+          cursor="pointer"
+          onClick={hideSelf}
+        >
+          <Box borderWidth="1px" borderStartStyle="solid" height="100%" />
+        </Box>
+      )}
       {isError ? (
         <Button leftIcon={<Icon as={FaExclamationTriangle} />} onClick={() => refetch()}>
           Retry
@@ -92,6 +102,6 @@ export function CommentTree({ ids, nested = false }: CommentTreeProps) {
           {hasMore ? <Button onClick={() => fetchMore()}>Load More</Button> : isLoading && <Spinner />}
         </>
       )}
-    </VStack>
+    </Flex>
   );
 }
