@@ -12,7 +12,7 @@ const BATCH_SIZE = 5;
 
 // See https://github.com/react-icons/react-icons/issues/336
 const AngleDownIcon = forwardRef((props: IconBaseProps, ref: LegacyRef<HTMLSpanElement>) => (
-  <span ref={ref}>
+  <span ref={ref} style={{ display: "inline-flex", alignItems: "center" }}>
     <FaAngleDown {...props} />
   </span>
 ));
@@ -43,9 +43,8 @@ function Comment({ text, id, kids, by, time, score, descendants, dead }: Item) {
           leftIcon={
             <MotionIcon
               as={AngleDownIcon}
-              rotate="90deg"
               animate={showChildren ? "open" : "closed"}
-              variants={{ open: { rotate: 0 }, closed: { rotate: 180 } }}
+              variants={{ open: { rotate: 180 }, closed: { rotate: 0 } }}
             />
           }
           onClick={() => setShowChildren(!showChildren)}
