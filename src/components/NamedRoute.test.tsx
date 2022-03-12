@@ -4,7 +4,7 @@ import { Switch } from "react-router-dom";
 import { Renderer } from "src/testUtils";
 import { NamedRoute } from "./NamedRoute";
 
-const render = Renderer.create().withRouter({ initialEntries: ["/foo"] }).render;
+const { render } = Renderer.create().withRouter({ initialEntries: ["/foo"] });
 
 function Component() {
   return (

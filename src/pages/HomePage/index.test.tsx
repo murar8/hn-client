@@ -3,7 +3,7 @@ import { fireEvent, screen } from "@testing-library/react";
 import { Renderer } from "src/testUtils";
 import HomePage from ".";
 
-const render = Renderer.create().withRouter().render;
+const { render } = Renderer.create().withRouter();
 
 it("displays the home page", async () => {
   const { history } = render(<HomePage />);

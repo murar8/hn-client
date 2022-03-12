@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import { Renderer } from "src/testUtils";
 import { NavigationMenu } from "./NavigationMenu";
 
@@ -37,6 +37,6 @@ it("does not display the current path in the menu", async () => {
 
   fireEvent.click(screen.getByText("About"));
 
-  const items = await waitFor(() => screen.getAllByRole("menuitem"));
+  const items = await screen.findAllByRole("menuitem");
   items.forEach((item) => expect(item).not.toHaveTextContent("About"));
 });

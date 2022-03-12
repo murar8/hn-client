@@ -3,12 +3,12 @@ import { fireEvent, screen } from "@testing-library/react";
 import { Renderer } from "src/testUtils";
 import { ItemCard } from "./ItemCard";
 
-const render = Renderer.create().withRouter().render;
+const { render } = Renderer.create().withRouter();
 
 it("displays the item content", async () => {
   render(<ItemCard item={{ id: 1000, title: "Title", url: "https://github.com/", by: "jd_rockfeller" }} />);
   expect(screen.getByText("Title")).toBeVisible();
-  expect(screen.getByText("github.com").closest("a")).toHaveProperty("href", "https://github.com/");
+  expect(screen.getByText("github.com")).toHaveProperty("href", "https://github.com/");
   expect(screen.getByText("jd_rockfeller")).toBeVisible();
 });
 

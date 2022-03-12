@@ -25,7 +25,7 @@ function Comment({ text, id, kids, by, time, score, descendants, dead }: Item) {
   const linkTextColor = useColorModeValue("gray.600", "gray.400");
 
   return (
-    <VStack spacing={2} alignItems="stretch">
+    <VStack spacing={2} alignItems="stretch" data-testid={`comment-${id}`}>
       <ItemData variant="ghost" by={by} time={time} score={score} descendants={descendants} dead={dead} />
       {text && (
         <Text

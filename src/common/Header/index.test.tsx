@@ -27,5 +27,5 @@ it("renders the routes as a series of links on large monitors", async () => {
 
 it("renders the routes as a menu on small monitors", async () => {
   setup(368);
-  expect(screen.getByText("About").closest("button")).toBeVisible();
+  expect(screen.getByText("About")).toBeVisible();
 });

@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom/extend-expect";
-import { fireEvent, getByText, screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen, waitFor, within } from "@testing-library/react";
 import { fetchItems } from "src/api";
 import { Renderer } from "src/testUtils";
 import { CommentTree } from "./CommentTree";
@@ -65,7 +65,8 @@ it("shows the comment's children when clicking the children button", async () =>
   expect(screen.getByText("Comment #100")).toBeVisible();
   expect(screen.getByText("Comment #104")).toBeVisible();
 
-  fireEvent.click(getByText(screen.getByText("Comment #100").closest("div")!, "10 children"));
+  const comment = screen.getByTestId("comment-100");
+  fireEvent.click(within(comment).getByText("10 children"));
   await waitForContent();
 
   expect(screen.getByText("Comment #1000")).toBeVisible();

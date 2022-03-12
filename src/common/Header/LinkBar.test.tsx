@@ -20,6 +20,6 @@ it("renders the supplied routes as links", async () => {
 
 it("highlights the current route", async () => {
   setup("/about");
-  expect(screen.getByText("Home").closest("a")).toHaveAttribute("aria-selected", "false");
-  expect(screen.getByText("About").closest("a")).toHaveAttribute("aria-selected", "true");
+  expect(screen.getByText("Home")).toHaveAttribute("aria-selected", "false");
+  expect(screen.getByText("About")).toHaveAttribute("aria-selected", "true");
 });
