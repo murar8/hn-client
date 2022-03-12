@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Icon, Spinner, Text, useColorModeValue, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, Icon, Text, useColorModeValue, VStack } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { forwardRef, LegacyRef, useRef, useState } from "react";
 import { IconBaseProps } from "react-icons";
