@@ -98,7 +98,11 @@ export function CommentTree({ ids, nested = false, hideSelf }: CommentTreeProps)
       ) : (
         <>
           {items && items.map((item) => (item.text?.length ?? 0) > 0 && <Comment key={item.id} {...item} />)}
-          {hasMore ? <Button onClick={() => fetchMore()}>Load More</Button> : isLoading && <Spinner />}
+          {hasMore && (
+            <Button marginTop={8} isLoading={isLoading} onClick={() => fetchMore()}>
+              Load More
+            </Button>
+          )}
         </>
       )}
     </Flex>
