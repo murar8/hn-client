@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Icon, Spinner, Text, useColorModeValue, VStack } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import { forwardRef, LegacyRef, useState } from "react";
+import { forwardRef, LegacyRef, useRef, useState } from "react";
 import { IconBaseProps } from "react-icons";
 import { FaAngleDown, FaExclamationTriangle } from "react-icons/fa";
 import { Item } from "src/api";
@@ -21,11 +21,19 @@ const MotionIcon = motion(Icon);
 
 function Comment({ text, id, kids, by, time, score, descendants, dead }: Item) {
   const [showChildren, setShowChildren] = useState(false);
+
+  const ref = useRef<HTMLDivElement | null>(null);
+
   const childrenTextColor = useColorModeValue("gray.500", "gray.400");
   const linkTextColor = useColorModeValue("gray.600", "gray.400");
 
+  const onHide = () => {
+    ref.current?.scrollIntoView();
+    setShowChildren(false);
+  };
+
   return (
-    <VStack spacing={2} alignItems="stretch" _notFirst={{ marginTop: 8 }} data-testid={`comment-${id}`}>
+    <VStack ref={ref} spacing={2} alignItems="stretch" _notFirst={{ marginTop: 8 }} data-testid={`comment-${id}`}>
       <ItemData variant="ghost" by={by} time={time} score={score} descendants={descendants} dead={dead} />
       {text && (
         <Text
@@ -52,7 +60,7 @@ function Comment({ text, id, kids, by, time, score, descendants, dead }: Item) {
           {`${kids.length} ${kids.length === 1 ? "child" : "children"}`}
         </Button>
       )}
-      {showChildren && kids?.length && <CommentTree ids={kids!} nested hideSelf={() => setShowChildren(false)} />}
+      {showChildren && kids?.length && <CommentTree ids={kids!} nested hideSelf={onHide} />}
     </VStack>
   );
 }
