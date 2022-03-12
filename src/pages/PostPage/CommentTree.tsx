@@ -74,7 +74,7 @@ export function CommentTree({ ids, nested = false, hideSelf }: CommentTreeProps)
   const borderColorActive = useColorModeValue("gray.400", "gray.300");
 
   return (
-    <Flex position="relative" direction="column" align="stretch" ps={nested ? 4 : 0}>
+    <Box position="relative" width="100%">
       {nested && (
         <Box
           as="span"
@@ -91,20 +91,26 @@ export function CommentTree({ ids, nested = false, hideSelf }: CommentTreeProps)
           <Box borderWidth="1px" borderStartStyle="solid" height="100%" />
         </Box>
       )}
-      {isError ? (
-        <Button leftIcon={<Icon as={FaExclamationTriangle} />} onClick={() => refetch()}>
-          Retry
-        </Button>
-      ) : (
-        <>
-          {items && items.map((item) => (item.text?.length ?? 0) > 0 && <Comment key={item.id} {...item} />)}
-          {hasMore && (
-            <Button marginTop={8} isLoading={isLoading} onClick={() => fetchMore()}>
-              Load More
-            </Button>
-          )}
-        </>
-      )}
-    </Flex>
+      <Flex direction="column" align="stretch" width="100%" ps={nested ? 4 : 0}>
+        {isError ? (
+          <Button leftIcon={<Icon as={FaExclamationTriangle} />} onClick={() => refetch()}>
+            Retry
+          </Button>
+        ) : (
+          <>
+            {items && items.map((item) => (item.text?.length ?? 0) > 0 && <Comment key={item.id} {...item} />)}
+            {(hasMore || isLoading) && (
+              <Button
+                sx={{ "&:not(:first-child)": { marginTop: 8 } }}
+                isLoading={isLoading}
+                onClick={() => fetchMore()}
+              >
+                Load More
+              </Button>
+            )}
+          </>
+        )}
+      </Flex>
+    </Box>
   );
 }
