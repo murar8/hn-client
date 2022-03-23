@@ -28,7 +28,7 @@ function Comment({ text, id, kids, by, time, score, descendants, dead }: Item) {
   const linkTextColor = useColorModeValue("gray.600", "gray.400");
 
   const onHide = () => {
-    ref.current?.scrollIntoView();
+    if (ref.current!.getBoundingClientRect().top < 0) ref.current!.scrollIntoView();
     setShowChildren(false);
   };
 
