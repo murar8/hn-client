@@ -21,10 +21,6 @@ export function ItemCard({ item: { title, url, id, ...item }, _hover, _active, .
     history.push(`/post/${id}`);
   };
 
-  const onMouseDown = (event: MouseEvent) => {
-    if (event.button === 1) window.open(`/post/${id}`, "_blank");
-  };
-
   return (
     <VStack
       borderColor={borderColor}
@@ -40,7 +36,6 @@ export function ItemCard({ item: { title, url, id, ...item }, _hover, _active, .
       _active={{ bgColor: activeColor, ..._active }}
       sx={{ WebkitTapHighlightColor: "transparent" }}
       onClick={onClick}
-      onMouseDown={onMouseDown}
       {...props}
     >
       {title && <Heading size="md">{title}</Heading>}
