@@ -1,5 +1,4 @@
 import { ChakraProps, Heading, useColorModeValue, VStack } from "@chakra-ui/react";
-import { MouseEvent } from "react";
 import { useHistory } from "react-router-dom";
 import { Item } from "src/api";
 import { ItemData } from "src/components/ItemData";
